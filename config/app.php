@@ -185,4 +185,7 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+    // Google Map API
+    'api_key'=>env('API_KEY'),
+
 ];
