@@ -2,6 +2,18 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\TimePeriodController;
+use App\Http\Controllers\SpotController;
+use App\Http\Controllers\SuspiciousReportController;
+use App\Http\Controllers\SuspiciousReportCommentController;
+use App\Http\Controllers\SuspiciousReportImageController;
+use App\Http\Controllers\IncidentReportController;
+use App\Http\Controllers\IncidentReportCommentController;
+use App\Http\Controllers\IncidentReportImageController;
+use App\Http\Controllers\SafetyReportController;
+use App\Http\Controllers\SafetyReportCommentController;
+use App\Http\Controllers\SafetyReportImageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,3 +41,7 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::get('/incidentReports',[IncidentReportController::class,'index']);
+Route::get('/suspiciousReports',[SuspiciousReportController::class,'index']);
+Route::get('/safetyReports',[SafetyReportController::class,'index']);
