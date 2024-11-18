@@ -11,6 +11,7 @@ use App\Http\Controllers\SuspiciousReportImageController;
 use App\Http\Controllers\IncidentReportController;
 use App\Http\Controllers\IncidentReportCommentController;
 use App\Http\Controllers\IncidentReportImageController;
+use App\Http\Controllers\PostsController;
 use App\Http\Controllers\SafetyReportController;
 use App\Http\Controllers\SafetyReportCommentController;
 use App\Http\Controllers\SafetyReportImageController;
@@ -42,6 +43,7 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
+Route::get('/allPosts',[PostsController::class,'index']);
 Route::get('/incidentReports',[IncidentReportController::class,'index']);
 Route::get('/suspiciousReports',[SuspiciousReportController::class,'index']);
 Route::get('/safetyReports',[SafetyReportController::class,'index']);
