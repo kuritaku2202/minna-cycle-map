@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class IncidentReportImage extends Model
 {
     use HasFactory;
+    public function incidentReport(){
+        return $this->belongsTo(IncidentReport::class);
+    }
+
 
     protected $fillable = [
         'incident_report_id',

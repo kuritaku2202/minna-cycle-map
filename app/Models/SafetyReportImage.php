@@ -9,6 +9,12 @@ class SafetyReportImage extends Model
 {
     use HasFactory;
 
+
+    public function safetyReport(){
+        return $this->belongsTo(SafetyReport::class);
+    }
+
+
     protected $fillable = [
         'safety_report_id',
         'image_url',

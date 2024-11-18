@@ -9,6 +9,15 @@ class IncidentReportComment extends Model
 {
     use HasFactory;
 
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
+    public function incidentReport(){
+        return $this->belongsTo(IncidentReport::class);
+    }
+
     protected $fillable = [
         'user_id',
         'incident_report_id',

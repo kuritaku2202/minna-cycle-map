@@ -12,6 +12,32 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+
+    public function suspiciousReports(){
+        return $this->hasMany(SuspiciousReport::class);
+    }
+
+    public function incidentReports(){
+        return $this->hasMany(IncidentReport::class);
+    }
+
+    public function safetyReports(){
+        return $this->hasMany(SafetyReport::class);
+    }
+
+    public function suspiciousReportComments(){
+        return $this->hasMany(SuspiciousReportComment::class);
+    }
+
+    public function incidentReportComments(){
+        return $this->hasMany(IncidentReportComment::class);
+    }
+
+    public function safetyReportComments(){
+        return $this->hasMany(SafetyReportComment::class);
+    }
+
+
     /**
      * The attributes that are mass assignable.
      *
