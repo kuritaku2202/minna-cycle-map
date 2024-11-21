@@ -43,7 +43,26 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::get('/allPosts',[PostsController::class,'index']);
-Route::get('/incidentReports',[IncidentReportController::class,'index']);
-Route::get('/suspiciousReports',[SuspiciousReportController::class,'index']);
-Route::get('/safetyReports',[SafetyReportController::class,'index']);
+//ここから自分で記入
+Route::controller(PostsController::class)->middleware(['auth'])->group(function(){
+    Route::get('/allPosts','index');
+    Route::get('/choose_post_type','choosePostType')->name('choose_post_type');
+});
+
+Route::controller(IncidentReportController::class)->middleware(['auth'])->group(function(){
+    Route::get('/incidentReports','index');
+    Route::get('/create_incident_report','create')->name('create_incident_report');
+    Route::post('/create_incident_report', 'store');
+});
+
+Route::controller(SuspiciousReportController::class)->middleware(['auth'])->group(function(){
+    Route::get('/suspiciousReports','index');
+    Route::get('/create_suspicious_report','create')->name('create_suspicious_report');
+    Route::post('/create_suspicious_report', 'store');
+});
+
+Route::controller(SafetyReportController::class)->middleware(['auth'])->group(function(){
+    Route::get('/safetyReports','index');
+    Route::get('/create_safety_report','create')->name('create_safety_report');
+    Route::post('/create_safety_report', 'store');
+});

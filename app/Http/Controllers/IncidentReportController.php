@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\IncidentReport;
+use App\Models\TimePeriod;
 
 class IncidentReportController extends Controller
 {
@@ -14,5 +15,15 @@ class IncidentReportController extends Controller
 //種別投稿画面で使用
     public function index(IncidentReport $incidentReport){
         return view('posts.all_incident_reports')->with(['incidentReports'=>$incidentReport->get()]);
+    }
+//投稿作成画面で使用
+    public function create(TimePeriod $timePeriod){
+        return view('posts.create_incident_report')->with(['timePeriods'=>$timePeriod->get()]);
+    }
+
+    public function store(Request $request, IncidentReport $incidentReport){
+        $input = $request['incidentReport'];
+        $incidentReport -> fill($input)->save();
+        return redirect('/incidentReports');
     }
 }

@@ -15,6 +15,9 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('choose_post_type')" :active="request()->routeIs('choose_post_type')">
+                        {{ __('投稿作成')}}
+                    </x-nav-link>
                 </div>
             </div>
 
