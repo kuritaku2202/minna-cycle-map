@@ -22,8 +22,8 @@ class SafetyReportFactory extends Factory
             'date' => $this->faker->date(),
             'time_period_id' => $this->faker->numberBetween(1,4),
             'description' => $this->faker->text(200),
-            'security_staff' => $this->faker->boolean(),
-            'security_camera' => $this->faker->boolean(),
+            'security_staff' => $this->faker->numberBetween(-1,1),
+            'security_camera' => $this->faker->numberBetween(-1,1),
             'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'), // 過去1年以内
             'updated_at' => $this->faker->dateTimeBetween('-1 month', 'now'), // 過去1ヶ月以内
         ];

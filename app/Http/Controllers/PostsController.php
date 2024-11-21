@@ -21,6 +21,10 @@ class PostsController extends Controller
         return view('posts.all_posts', compact('incidentReports', 'suspiciousReports', 'safetyReports'));
     }
 
+    public function choosePostType(){
+        return view('posts.choose_post_type');
+    }
+
     // public function index(IncidentReport $incidentReport, SuspiciousReport $suspiciousReport, SafetyReport $safetyReport){
     //     return view('posts.all_posts')->with(['incidentReports'=>$incidentReport->get()])->with(['suspiciousReports'=>$suspiciousReport->get()])->with(['safetyReports'=>$safetyReport->get()]);
     // }

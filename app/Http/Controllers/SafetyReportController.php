@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\SafetyReport;
+use App\Models\TimePeriod;
 
 class SafetyReportController extends Controller
 {
@@ -12,5 +13,14 @@ class SafetyReportController extends Controller
     }
     public function index(SafetyReport $safetyReport){
         return view('posts.all_safety_reports')->with(['safetyReports'=>$safetyReport->get()]);
+    }
+    //投稿作成画面で使用
+    public function create(TimePeriod $timePeriod){
+        return view('posts.create_safety_report')->with(['timePeriods'=>$timePeriod->get()]);
+    }
+    public function store(Request $request, SafetyReport $safetyReport){
+        $input = $request['safetyReport'];
+        $safetyReport -> fill($input)->save();
+        return redirect('/safetyReports');
     }
 }
