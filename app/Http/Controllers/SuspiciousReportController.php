@@ -21,6 +21,6 @@ class SuspiciousReportController extends Controller
     public function store(Request $request, SuspiciousReport $suspiciousReport){
         $input = $request['suspiciousReport'];
         $suspiciousReport -> fill($input)->save();
-        return redirect('/suspiciousReports');
+        return redirect('/suspicious_reports');
     }
 }

@@ -21,6 +21,6 @@ class SafetyReportController extends Controller
     public function store(Request $request, SafetyReport $safetyReport){
         $input = $request['safetyReport'];
         $safetyReport -> fill($input)->save();
-        return redirect('/safetyReports');
+        return redirect('/safety_reports');
     }
 }
