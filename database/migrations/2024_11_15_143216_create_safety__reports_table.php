@@ -17,9 +17,9 @@ return new class extends Migration
             $table->foreignId('spot_id')->nullable()->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('time_period_id')->nullable()->constrained('time_periods')->cascadeOnUpdate();
             $table->date('date');
-            $table->string('description',1000);
-            $table->integer('security_staff');
-            $table->integer('security_camera');
+            $table->string('description',1000)->nullable();
+            $table->tinyInteger('security_staff')->default(0)->comment('0=不明,1=はい,-1=いいえ');
+            $table->tinyInteger('security_camera')->default(0)->comment('0=不明,1=はい,-1=いいえ');
             $table->timestamps();
             $table->softDeletes();
         });

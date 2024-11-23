@@ -37,5 +37,7 @@ class SafetyReport extends Model
         'date',
         'time_period_id',
         'description',
+        'security_staff',
+        'security_camera',
     ];
 }

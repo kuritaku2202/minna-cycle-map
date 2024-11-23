@@ -24,6 +24,10 @@ class IncidentReportController extends Controller
     public function store(Request $request, IncidentReport $incidentReport){
         $input = $request['incidentReport'];
         $incidentReport -> fill($input)->save();
-        return redirect('/incidentReports');
+        return redirect('/incident_reports');
+    }
+
+    public function chooseIncidentSpot(){
+        return view('posts.choose_incident_spot');
     }
 }

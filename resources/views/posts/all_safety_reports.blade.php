@@ -14,7 +14,7 @@
         <div class="safetyReports">
             @foreach ($safetyReports as $safetyReport)
                 <div class="safetyReport">
-                    <h2 class="date">{{ $safetyReport->date}}、時間帯：{{ $safetyReport->timePeriod->time_slot}}</h2>
+                    <h2 class="date">{{ $safetyReport->date}}、時間帯：{{ $safetyReport->timePeriod->time_slot}}、スタッフ有無</h2>
                     <h3>報告内容</h3>
                     <p class="body">{{$safetyReport->description}}</p>
                 </div>

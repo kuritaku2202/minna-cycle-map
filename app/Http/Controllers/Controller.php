@@ -6,7 +6,15 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 
+
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
+    public function home(){
+
+        // .envのAPIキーを変数へ
+        $api_key = config('app.api_key');
+        return view('posts.home')->with(['api_key' => $api_key]);
+
+    }
 }
