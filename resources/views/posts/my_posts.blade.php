@@ -16,7 +16,7 @@
         </x-slot>
             <body>
             <!-- 被害報告 -->
-                <div class="alert alert-primary" role="alert">
+                <div class="mt-1 alert alert-primary" role="alert">
                     <h1>被害報告</h1>
                 </div>
                 <div class="container text-center">
@@ -30,7 +30,7 @@
                                         <h3 class="card-text">[時間帯]:{{ $post->timePeriod->time_slot}}</h3>
                                         <h3>[詳細]</h3>
                                         <p class="card-text">{{ $post->description}}</p>
-                                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                                        <a href="/incident_reports/{{ $post->id }}" class="btn btn-primary">詳細・編集</a>
                                     </div>
                                 </div>
                             </div>
@@ -39,7 +39,7 @@
                 </div>
 
             <!-- 不審者・不審物情報 -->
-                <div class="alert alert-primary" role="alert">
+                <div class="mt-5 alert alert-primary" role="alert">
                     <h1>不審者・不審物情報</h1>
                 </div>
                 <div class="container text-center">
@@ -62,7 +62,7 @@
                 </div>
 
             <!-- 駐輪場の安全情報の共有 -->
-                <div class="alert alert-primary" role="alert">
+                <div class="mt-5 alert alert-primary" role="alert">
                     <h1>駐輪場の安全情報の共有</h1>
                 </div>
                 <div class="container text-center">

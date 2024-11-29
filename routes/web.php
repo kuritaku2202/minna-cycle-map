@@ -51,11 +51,14 @@ Route::controller(Controller::class)->middleware(['auth'])->group(function(){
 Route::controller(PostsController::class)->middleware(['auth'])->group(function(){
     Route::get('/allPosts','index');
     Route::get('/choose_post_type','choosePostType')->name('choose_post_type');
-    Route::get('/my_posts', 'myIndex');
+    Route::get('/my_posts', 'myIndex')->name('my_posts');
 });
 
 Route::controller(IncidentReportController::class)->middleware(['auth'])->group(function(){
     Route::get('/incident_reports','index');
+    Route::get('/incident_reports/{post}','show');
+    Route::get('incident_reports/{post}/edit','edit');
+    Route::put('/incident_reports/{post}','update');
     Route::get('/create_incident_report','create')->name('create_incident_report');
     Route::post('/create_incident_report', 'store');
     Route::get('/choose_incident_spot', 'chooseIncidentSpot');
