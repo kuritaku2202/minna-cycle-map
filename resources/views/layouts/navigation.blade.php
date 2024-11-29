@@ -18,6 +18,9 @@
                     <x-nav-link :href="route('choose_post_type')" :active="request()->routeIs('choose_post_type')">
                         {{ __('投稿作成')}}
                     </x-nav-link>
+                    <x-nav-link :href="route('my_posts')" :active="request()->routeIs('my_posts')">
+                        {{ __('自分の投稿を見る') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -39,6 +42,10 @@
                     <x-slot name="content">
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Profile') }}
+                        </x-dropdown-link>
+                        
+                        <x-dropdown-link :href="route('my_posts')">
+                            {{ __('my_posts') }}
                         </x-dropdown-link>
 
                         <!-- Authentication -->

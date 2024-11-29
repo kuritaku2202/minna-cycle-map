@@ -16,6 +16,11 @@ class IncidentReportController extends Controller
     public function index(IncidentReport $incidentReport){
         return view('posts.all_incident_reports')->with(['incidentReports'=>$incidentReport->get()]);
     }
+
+    public function show(IncidentReport $post){
+        return view('posts.show_incident_report')->with(['post' => $post]);
+    }
+
 //投稿作成画面で使用
     public function create(TimePeriod $timePeriod){
         return view('posts.create_incident_report')->with(['timePeriods'=>$timePeriod->get()]);
