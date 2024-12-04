@@ -1,7 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Http\Requests\IncidentReportRequest;
 use Illuminate\Http\Request;
+use App\Http\Requests\SuspiciousReportRequest;
 use App\Models\IncidentReport;
 use App\Models\TimePeriod;
 use App\Models\Spot;
@@ -45,7 +48,7 @@ class IncidentReportController extends Controller
         return view('posts.create_incident_report')->with(['timePeriods'=>$timePeriod->get(),'spot'=>$spot]);
     }
 
-    public function store(Request $request, IncidentReport $incidentReport){
+    public function store(IncidentReportRequest $request, IncidentReport $incidentReport){
         $input = $request['incidentReport'];
         $incidentReport -> fill($input)->save();
         return redirect('/incident_reports/'.$incidentReport->id);

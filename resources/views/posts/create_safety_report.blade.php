@@ -21,18 +21,21 @@
                     </div>
                     <div class="date">
                         <h2>駐輪場の訪問日</h2>
+                        <p class="date_error" style="color:red">{{ $errors->first('safetyReport.date') }}</p>
                         <input type="date" name="safetyReport[date]"/>
                     </div>
                     <div class="time_slot">
                         <h2>訪問した時間帯</h2>
+                        <p class="time_slot_error" style="color:red">{{ $errors->first('safetyReport.time_period_id') }}</p>
                         @foreach ($timePeriods as $timePeriod)
                             <input type="radio" name="safetyReport[time_period_id]" value="{{ $timePeriod->id }}">
                                 {{ $timePeriod->time_slot}}
                             </input><br>
                         @endforeach
                     </div>
-                    <div class="security_stuff">
+                    <div class="security_staff">
                         <h2>警備スタッフはいましたか？</h2>
+                        <p class="security_staff_error" style="color:red">{{ $errors->first('safetyReport.security_staff') }}</p>
                         <input type="radio" name="safetyReport[security_staff_id]" value="1">
                         わからない
                         <br>
@@ -45,6 +48,7 @@
                     </div>
                     <div class="security_camera">
                         <h2>防犯カメラはありましたか？</h2>
+                        <p class="security_camera_error" style="color:red">{{ $errors->first('safetyReport.security_camera') }}</p>
                         <input type="radio" name="safetyReport[security_camera_id]" value="1"/>
                         わからない
                         <br>
