@@ -49,11 +49,11 @@
                                 <div class="card" style="width: 18rem;">
                                     <img src="..." class="card-img-top" alt="...">
                                     <div class="card-body">
-                                        <h2 class="card-title">[被害に遭った日]:{{ $post->date }}</h2>
+                                        <h2 class="card-title">[目撃日]:{{ $post->date }}</h2>
                                         <h3 class="card-text">[時間帯]:{{ $post->timePeriod->time_slot}}</h3>
                                         <h3>[詳細]</h3>
                                         <p class="card-text">{{ $post->description}}</p>
-                                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                                        <a href="/suspicious_reports/{{ $post->id }}" class="btn btn-primary">詳細・編集</a>
                                     </div>
                                 </div>
                             </div>
@@ -72,13 +72,13 @@
                                 <div class="card" style="width: 18rem;">
                                     <img src="..." class="card-img-top" alt="...">
                                     <div class="card-body">
-                                        <h2 class="card-title">[被害に遭った日]:{{ $post->date }}</h2>
+                                        <h2 class="card-title">[訪問日]:{{ $post->date }}</h2>
                                         <h3 class="card-text">[時間帯]:{{ $post->timePeriod->time_slot}}</h3>
                                         <h3 class="card-text">[監視員]{{ $post->securityStaff->status }}</h3>
                                         <h3 class="card-text">[防犯カメラ]{{ $post->securityCamera->status }}</h3>
                                         <h3>[詳細]</h3>
                                         <p class="card-text">{{ $post->description}}</p>
-                                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                                        <a href="/safety_reports/{{ $post->id }}" class="btn btn-primary">詳細・編集</a>
                                     </div>
                                 </div>
                             </div>
