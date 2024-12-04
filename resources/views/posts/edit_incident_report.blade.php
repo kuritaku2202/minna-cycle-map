@@ -21,6 +21,7 @@
                         @method('put')
                         <div class="date">
                             <h2>被害を受けた日付</h2>
+                            <p class="date_error" style="color:red">{{ $errors->first('incidentReport.date') }}</p>
                             <input type="date" name="incidentReport[date]" value="{{ $post->date }}"/>
                         </div>
                         <div class="time_slot">
@@ -34,6 +35,7 @@
                         </div>
                         <div class="description">
                             <h2>被害の詳細</h2>
+                            <p class="description_error" style="color:red">{{ $errors->first('incidentReport.description') }}</p>
                             <input type="text" name="incidentReport[description]"  value="{{ $post->description}}"></input>
                         </div>
                         <input type="submit" value="投稿する"/>

@@ -21,6 +21,7 @@
                         @method('put')
                         <div class="date">
                             <h2>駐輪場の訪問日</h2>
+                            <p class="date_error" style="color:red">{{ $errors->first('safetyReport.date') }}</p>
                             <input type="date" name="safetyReport[date]" value="{{ $post->date }}"/>
                         </div>
                         <div class="time_slot">

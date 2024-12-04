@@ -21,6 +21,7 @@
                         @method('put')
                         <div class="date">
                             <h2>目撃日</h2>
+                            <p class="date_error" style="color:red">{{ $errors->first('suspiciousReport.date') }}</p>
                             <input type="date" name="suspiciousReport[date]" value="{{ $post->date }}"/>
                         </div>
                         <div class="time_slot">
@@ -34,6 +35,7 @@
                         </div>
                         <div class="description">
                             <h2>不審者・不審物の詳細情報</h2>
+                            <p class="description_error" style="color:red">{{ $errors->first('suspiciousReport.description') }}</p>
                             <input type="text" name="suspiciousReport[description]"  value="{{ $post->description}}"></input>
                         </div>
                         <input type="submit" value="投稿する"/>
