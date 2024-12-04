@@ -34,6 +34,7 @@ class PostsController extends Controller
         $mySuspiciousReports = $user->suspiciousReports;
         $mySafetyReports = $user->safetyReports;
 
+        // dd($mySafetyReports);
         return view('posts.my_posts', compact('myIncidentReports', 'mySuspiciousReports', 'mySafetyReports'));
     }
 

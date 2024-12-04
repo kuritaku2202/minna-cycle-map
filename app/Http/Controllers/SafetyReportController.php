@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\SafetyReport;
 use App\Models\TimePeriod;
+use App\Models\SecurityCamera;
+use App\Models\SecurityStaff;
 
 class SafetyReportController extends Controller
 {
