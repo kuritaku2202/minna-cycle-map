@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use App\Models\IncidentReport;
 use App\Models\TimePeriod;
@@ -18,8 +17,8 @@ class IncidentReportController extends Controller
         return view('posts.all_incident_reports')->with(['incidentReports'=>$incidentReport->get()]);
     }
 
-    public function show(IncidentReport $post){
-        return view('posts.show_incident_report')->with(['post' => $post]);
+    public function show(IncidentReport $incidentReport){
+        return view('posts.show_incident_report')->with(['post' => $incidentReport]);
     }
 
     //投稿作成画面で使用
@@ -40,7 +39,19 @@ class IncidentReportController extends Controller
     public function store(Request $request, IncidentReport $incidentReport){
         $input = $request['incidentReport'];
         $incidentReport -> fill($input)->save();
-        return redirect('/incident_reports');
+        return redirect('/incident_reports/'.$incidentReport->id);
+    }
+
+    public function edit(IncidentReport $incidentReport,TimePeriod $timePeriod){
+        // dd($incidentReport);
+        return view('posts.edit_incident_report')->with(['post' => $incidentReport, 'timePeriods' => $timePeriod->get()]);
+    }
+
+    public function update(Request $request, IncidentReport $incidentReport){
+        $imput = $request['incidentReport'];
+        $incidentReport->fill($imput)->save();
+
+        return redirect('/incident_reports/'.$incidentReport->id);
     }
 
 }
