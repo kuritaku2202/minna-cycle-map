@@ -18,8 +18,8 @@ return new class extends Migration
             $table->foreignId('time_period_id')->nullable()->constrained('time_periods')->cascadeOnUpdate();
             $table->date('date');
             $table->string('description',1000)->nullable();
-            $table->tinyInteger('security_staff')->default(0)->comment('0=不明,1=はい,-1=いいえ');
-            $table->tinyInteger('security_camera')->default(0)->comment('0=不明,1=はい,-1=いいえ');
+            $table->foreignId('security_staff_id')->nullable()->constrained()->cascadeOnUpdate();
+            $table->foreignId('security_camera_id')->nullable()->constrained()->cascadeOnUpdate();
             $table->timestamps();
             $table->softDeletes();
         });

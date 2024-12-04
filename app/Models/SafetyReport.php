@@ -30,6 +30,13 @@ class SafetyReport extends Model
         return $this->belongsTo(TimePeriod::class);
     }
 
+    public function securityStaff(){
+        return $this->belongsTo(SecurityStaff::class);
+    }
+
+    public function securityCamera(){
+        return $this->belongsTo(SecurityCamera::class);
+    }
 
     protected $fillable = [
         'user_id',
@@ -37,7 +44,7 @@ class SafetyReport extends Model
         'date',
         'time_period_id',
         'description',
-        'security_staff',
-        'security_camera',
+        'security_staff_id',
+        'security_camera_id',
     ];
 }
