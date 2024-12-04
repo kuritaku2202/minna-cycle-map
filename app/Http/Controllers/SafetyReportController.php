@@ -16,6 +16,23 @@ class SafetyReportController extends Controller
     public function index(SafetyReport $safetyReport){
         return view('posts.all_safety_reports')->with(['safetyReports'=>$safetyReport->get()]);
     }
+
+    // 投稿詳細画面
+    public function show(SafetyReport $safetyReport){
+        return view('posts.show_safety_report')->with(['post' => $safetyReport]);
+    }
+
+    public function edit(SafetyReport $safetyReport,TimePeriod $timePeriod){
+        return view('posts.edit_safety_report')->with(['post' => $safetyReport, 'timePeriods' => $timePeriod->get()]);
+    }
+
+    public function update(Request $request, SafetyReport $safetyReport){
+        $imput = $request['safetyReport'];
+        $safetyReport->fill($imput)->save();
+
+        return redirect('/safety_reports/'.$safetyReport->id);
+    }
+
     //投稿作成画面で使用
     public function create(TimePeriod $timePeriod){
         return view('posts.create_safety_report')->with(['timePeriods'=>$timePeriod->get()]);

@@ -66,12 +66,18 @@ Route::controller(IncidentReportController::class)->middleware(['auth'])->group(
 
 Route::controller(SuspiciousReportController::class)->middleware(['auth'])->group(function(){
     Route::get('/suspicious_reports','index');
+    Route::get('/suspicious_reports/{suspiciousReport}','show');
+    Route::get('/suspicious_reports/{suspiciousReport}/edit','edit');
+    Route::put('/suspicious_reports/{suspiciousReport}','update');
     Route::get('/create_suspicious_report','create')->name('create_suspicious_report');
     Route::post('/create_suspicious_report', 'store');
 });
 
 Route::controller(SafetyReportController::class)->middleware(['auth'])->group(function(){
     Route::get('/safety_reports','index');
+    Route::get('/safety_reports/{safetyReport}','show');
+    Route::get('/safety_reports/{safetyReport}/edit','edit');
+    Route::put('/safety_reports/{safetyReport}','update');
     Route::get('/create_safety_report','create')->name('create_safety_report');
     Route::post('/create_safety_report', 'store');
 });

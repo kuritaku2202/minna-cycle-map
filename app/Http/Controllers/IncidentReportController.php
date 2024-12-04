@@ -17,8 +17,20 @@ class IncidentReportController extends Controller
         return view('posts.all_incident_reports')->with(['incidentReports'=>$incidentReport->get()]);
     }
 
+// 投稿詳細画面
     public function show(IncidentReport $incidentReport){
         return view('posts.show_incident_report')->with(['post' => $incidentReport]);
+    }
+
+    public function edit(IncidentReport $incidentReport,TimePeriod $timePeriod){
+        return view('posts.edit_incident_report')->with(['post' => $incidentReport, 'timePeriods' => $timePeriod->get()]);
+    }
+
+    public function update(Request $request, IncidentReport $incidentReport){
+        $imput = $request['incidentReport'];
+        $incidentReport->fill($imput)->save();
+
+        return redirect('/incident_reports/'.$incidentReport->id);
     }
 
     //投稿作成画面で使用
@@ -27,10 +39,7 @@ class IncidentReportController extends Controller
         return view('posts.choose_incident_spot')->with(['api_key'=>$api_key]);
     }
     public function create(TimePeriod $timePeriod,Request $request, Spot $spot){
-        // $lat = $request->query('lat');// GETパラメータ "lat" の値
-        // $lng = $request->query('lng');// GETパラメータ "lng" の値
         $input=$request['spot'];
-        // $spot->longitude = $lng;
         $spot->fill($input)->save();
 
         return view('posts.create_incident_report')->with(['timePeriods'=>$timePeriod->get(),'spot'=>$spot]);
@@ -42,16 +51,5 @@ class IncidentReportController extends Controller
         return redirect('/incident_reports/'.$incidentReport->id);
     }
 
-    public function edit(IncidentReport $incidentReport,TimePeriod $timePeriod){
-        // dd($incidentReport);
-        return view('posts.edit_incident_report')->with(['post' => $incidentReport, 'timePeriods' => $timePeriod->get()]);
-    }
-
-    public function update(Request $request, IncidentReport $incidentReport){
-        $imput = $request['incidentReport'];
-        $incidentReport->fill($imput)->save();
-
-        return redirect('/incident_reports/'.$incidentReport->id);
-    }
 
 }

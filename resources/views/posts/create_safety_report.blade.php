@@ -33,26 +33,26 @@
                     </div>
                     <div class="security_stuff">
                         <h2>警備スタッフはいましたか？</h2>
+                        <input type="radio" name="safetyReport[security_staff_id]" value="1">
+                        わからない
+                        <br>
                         <input type="radio" name="safetyReport[security_staff_id]" value="2">
                         はい
                         <br>
                         <input type="radio" name="safetyReport[security_staff_id]" value="3">
                         いいえ
                         <br>
-                        <input type="radio" name="safetyReport[security_staff_id]" value="1">
-                        わからない
-                        <br>
                     </div>
                     <div class="security_camera">
                         <h2>防犯カメラはありましたか？</h2>
+                        <input type="radio" name="safetyReport[security_camera_id]" value="1"/>
+                        わからない
+                        <br>
                         <input type="radio" name="safetyReport[security_camera_id]" value="2"/>
                         はい
                         <br>
                         <input type="radio" name="safetyReport[security_camera_id]" value="3"/>
                         いいえ
-                        <br>
-                        <input type="radio" name="safetyReport[security_camera_id]" value="1"/>
-                        わからない
                         <br>
                     </div>
                     <div class="description">

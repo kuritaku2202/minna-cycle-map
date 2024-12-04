@@ -16,28 +16,28 @@
         </x-slot>
             <body>
                 <div class="content">
-                    <form action="/incident_reports/{{ $post->id }}" method="post">
+                    <form action="/suspicious_reports/{{ $post->id }}" method="post">
                         @csrf
                         @method('put')
                         <div class="date">
-                            <h2>被害を受けた日付</h2>
-                            <input type="date" name="incidentReport[date]" value="{{ $post->date }}"/>
+                            <h2>目撃日</h2>
+                            <input type="date" name="suspiciousReport[date]" value="{{ $post->date }}"/>
                         </div>
                         <div class="time_slot">
-                            <h2>被害を受けた時間帯</h2>
+                            <h2>目撃した時間帯</h2>
                             @foreach ($timePeriods as $timePeriod)
-                                <input type="radio" name="incidentReport[time_period_id]" value="{{ $timePeriod->id }}"
-                                {{ old('incidentReport.time_period_id') == $timePeriod->id ? 'checked' : '' }}>
+                                <input type="radio" name="suspiciousReport[time_period_id]" value="{{ $timePeriod->id }}"
+                                {{ old('suspiciousReport.time_period_id') == $timePeriod->id ? 'checked' : '' }}>
                                 {{ $timePeriod->time_slot }}
                                 </input><br>
                             @endforeach
                         </div>
                         <div class="description">
-                            <h2>被害の詳細</h2>
-                            <input type="text" name="incidentReport[description]"  value="{{ $post->description}}"></input>
+                            <h2>不審者・不審物の詳細情報</h2>
+                            <input type="text" name="suspiciousReport[description]"  value="{{ $post->description}}"></input>
                         </div>
                         <input type="submit" value="投稿する"/>
-                        <a href="/incident_reports/{{ $post->id }}">戻る</a>
+                        <a href="/suspicious_reports/{{ $post->id }}">戻る</a>
                     </form>
                 </div>
             </body>
