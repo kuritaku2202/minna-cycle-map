@@ -23,7 +23,7 @@ class SuspiciousReportController extends Controller
         return view('posts.edit_suspicious_report')->with(['post' => $suspiciousReport, 'timePeriods' => $timePeriod->get()]);
     }
 
-    public function update(Request $request, SuspiciousReport $suspiciousReport){
+    public function update(SuspiciousReportRequest $request, SuspiciousReport $suspiciousReport){
         $imput = $request['suspiciousReport'];
         $suspiciousReport->fill($imput)->save();
 

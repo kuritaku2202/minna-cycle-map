@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\IncidentReportRequest;
 use Illuminate\Http\Request;
-use App\Http\Requests\SuspiciousReportRequest;
 use App\Models\IncidentReport;
 use App\Models\TimePeriod;
 use App\Models\Spot;
@@ -29,7 +28,7 @@ class IncidentReportController extends Controller
         return view('posts.edit_incident_report')->with(['post' => $incidentReport, 'timePeriods' => $timePeriod->get()]);
     }
 
-    public function update(Request $request, IncidentReport $incidentReport){
+    public function update(IncidentReportRequest $request, IncidentReport $incidentReport){
         $imput = $request['incidentReport'];
         $incidentReport->fill($imput)->save();
 

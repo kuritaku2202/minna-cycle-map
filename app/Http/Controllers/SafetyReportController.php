@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SafetyReportRequest;
 use Illuminate\Http\Request;
-use App\Http\Requests\SuspiciousReportRequest;
 use App\Models\SafetyReport;
 use App\Models\TimePeriod;
 use App\Models\SecurityCamera;
@@ -28,7 +27,7 @@ class SafetyReportController extends Controller
         return view('posts.edit_safety_report')->with(['post' => $safetyReport, 'timePeriods' => $timePeriod->get()]);
     }
 
-    public function update(Request $request, SafetyReport $safetyReport){
+    public function update(SafetyReportRequest $request, SafetyReport $safetyReport){
         $imput = $request['safetyReport'];
         $safetyReport->fill($imput)->save();
 
