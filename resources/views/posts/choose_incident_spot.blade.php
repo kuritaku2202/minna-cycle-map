@@ -73,7 +73,7 @@
             }
 
             function updateFormFields(latitude, longitude) {
-                console.log('set_value');
+                // console.log('set_value');
                 document.getElementById('hiddenLat').value = latitude;
                 document.getElementById('hiddenLng').value = longitude;
             }
