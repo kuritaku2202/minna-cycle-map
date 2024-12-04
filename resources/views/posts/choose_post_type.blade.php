@@ -25,7 +25,7 @@
                                 <div class="card-body">
                                     <h5 class="card-title">被害報告</h5>
                                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                    <a href="/create_incident_report" class="btn btn-primary">投稿する</a>
+                                    <a href="/choose_incident_spot" class="btn btn-primary">投稿する</a>
                                 </div>
                             </div>
                         </div>

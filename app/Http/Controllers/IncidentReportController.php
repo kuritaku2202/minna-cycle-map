@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\IncidentReport;
 use App\Models\TimePeriod;
+use App\Models\Spot;
 
 class IncidentReportController extends Controller
 {
@@ -21,9 +22,19 @@ class IncidentReportController extends Controller
         return view('posts.show_incident_report')->with(['post' => $post]);
     }
 
-//投稿作成画面で使用
-    public function create(TimePeriod $timePeriod){
-        return view('posts.create_incident_report')->with(['timePeriods'=>$timePeriod->get()]);
+    //投稿作成画面で使用
+    public function chooseIncidentSpot(){
+        $api_key = config('app.api_key');
+        return view('posts.choose_incident_spot')->with(['api_key'=>$api_key]);
+    }
+    public function create(TimePeriod $timePeriod,Request $request, Spot $spot){
+        // $lat = $request->query('lat');// GETパラメータ "lat" の値
+        // $lng = $request->query('lng');// GETパラメータ "lng" の値
+        $input=$request['spot'];
+        // $spot->longitude = $lng;
+        $spot->fill($input)->save();
+
+        return view('posts.create_incident_report')->with(['timePeriods'=>$timePeriod->get(),'spot'=>$spot]);
     }
 
     public function store(Request $request, IncidentReport $incidentReport){
@@ -32,7 +43,4 @@ class IncidentReportController extends Controller
         return redirect('/incident_reports');
     }
 
-    public function chooseIncidentSpot(){
-        return view('posts.choose_incident_spot');
-    }
 }
