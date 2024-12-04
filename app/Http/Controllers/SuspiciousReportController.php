@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\SuspiciousReportRequest;
 use App\Models\SuspiciousReport;
 use App\Models\TimePeriod;
 
@@ -33,7 +34,7 @@ class SuspiciousReportController extends Controller
     public function create(TimePeriod $timePeriod){
         return view('posts.create_suspicious_report')->with(['timePeriods'=>$timePeriod->get()]);
     }
-    public function store(Request $request, SuspiciousReport $suspiciousReport){
+    public function store(SuspiciousReportRequest $request, SuspiciousReport $suspiciousReport){
         $input = $request['suspiciousReport'];
         $suspiciousReport -> fill($input)->save();
         return redirect('/suspicious_reports');

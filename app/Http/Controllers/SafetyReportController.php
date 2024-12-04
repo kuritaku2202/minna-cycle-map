@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SafetyReportRequest;
 use Illuminate\Http\Request;
+use App\Http\Requests\SuspiciousReportRequest;
 use App\Models\SafetyReport;
 use App\Models\TimePeriod;
 use App\Models\SecurityCamera;
@@ -37,7 +39,7 @@ class SafetyReportController extends Controller
     public function create(TimePeriod $timePeriod){
         return view('posts.create_safety_report')->with(['timePeriods'=>$timePeriod->get()]);
     }
-    public function store(Request $request, SafetyReport $safetyReport){
+    public function store(SafetyReportRequest $request, SafetyReport $safetyReport){
         $input = $request['safetyReport'];
         $safetyReport -> fill($input)->save();
         return redirect('/safety_reports');

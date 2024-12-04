@@ -29,10 +29,12 @@
 
                     <div class="date">
                         <h2>被害を受けた日付</h2>
+                        <p class="date_error" style="color:red">{{ $errors->first('incidentReport.date') }}</p>
                         <input type="date" name="incidentReport[date]"/>
                     </div>
                     <div class="time_slot">
                         <h2>被害を受けた時間帯</h2>
+                        <p class="time_slot_error" style="color:red">{{ $errors->first('incidentReport.time_period_id') }}</p>
                         @foreach ($timePeriods as $timePeriod)
                             <input type="radio" name="incidentReport[time_period_id]" value="{{ $timePeriod->id }}">
                                 {{ $timePeriod->time_slot}}
@@ -41,7 +43,8 @@
                     </div>
                     <div class="description">
                         <h2>被害の詳細</h2>
-                        <textarea name="incidentReport[description]"  placeholder="被害の詳細を入力してください"></textarea>
+                        <p class="description_error" style="color:red">{{ $errors->first('incidentReport.description') }}</p>
+                        <textarea name="incidentReport[description]"  placeholder="被害の詳細を入力してください">{{ old('incidentReport.description')}}</textarea>
                     </div>
                     <input type="submit" value="投稿する"/>
                 </form>
