@@ -19,6 +19,14 @@
                     <div class="user">
                         <input type="hidden" name="incidentReport[user_id]" value="{{ Auth::user()->id }}">
                     </div>
+                    <div class="spot">
+                        <input type="hidden" name="incidentReport[spot_id]" value="{{ $spot->id }}">
+                    </div>
+                    
+                    <!-- URLから渡された緯度と経度を表示 -->
+                        <p>緯度: {{ $spot->latitude }}</p>
+                        <p>経度: {{ $spot->longitude }}</p>
+
                     <div class="date">
                         <h2>被害を受けた日付</h2>
                         <input type="date" name="incidentReport[date]"/>

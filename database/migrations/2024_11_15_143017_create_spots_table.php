@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('spots', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->float('latitude');
             $table->float('longitude');
-            $table->string('address');
+            $table->string('address')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
