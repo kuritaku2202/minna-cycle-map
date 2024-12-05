@@ -49,7 +49,7 @@ class SafetyReportController extends Controller
     public function store(SafetyReportRequest $request, SafetyReport $safetyReport){
         $input = $request['safetyReport'];
         $safetyReport -> fill($input)->save();
-        return redirect('/safety_reports');
+        return redirect('/safety_reports/'.$safetyReport->id);
     }
 
     public function delete(SafetyReport $safetyReport){

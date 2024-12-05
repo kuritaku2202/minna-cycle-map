@@ -47,6 +47,8 @@ require __DIR__.'/auth.php';
 //ここから自分で記入
 Route::controller(Controller::class)->middleware(['auth'])->group(function(){
     Route::get('/home','home')->name('home');
+    Route::get('/home_experiment','homeExperiment');
+    Route::get('/post_experiment','postExperiment');
 });
 Route::controller(PostsController::class)->middleware(['auth'])->group(function(){
     Route::get('/allPosts','index');

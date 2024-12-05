@@ -1,95 +1,160 @@
 <!doctype html>
 <html lang="ja">
-    <head>
-        <meta charset="utf-8">
-        <title>Google Maps Point Marker</title>
-    <x-app-layout>
-        <style type="text/css">
-            #map {
+<head>
+    <meta charset="utf-8">
+    <title>Google Maps with Nearby Parking</title>
+    <style>
+        #map {
             height: 600px;
             width: 80%;
+        }
+        #parking-info {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?language=ja&region=JP&key={{$google_map_api_key}}&libraries=places&callback=initMap" async defer></script>
+</head>
+<x-app-layout>
+<body>
+    <p>投稿する場所を選んでください</p>
+    <div id="map"></div>
+    <div id="parking-info"></div>
+    <form action="/create_suspicious_report" method="get">
+        <input type="hidden" id="hiddenLat" name="spot[latitude]">
+        <input type="hidden" id="hiddenLng" name="spot[longitude]">
+        <input type="hidden" id="hiddenName" name="spot[name]">
+        <button type="submit">投稿ページへ</button>
+    </form>
+
+    <script>
+        // Mapとマーカーの管理オブジェクト
+        const MapManager = {
+            map: null,
+            currentLocationMarker: null,
+            parkingMarkers: [],
+            placesService: null,
+
+            initMap(lat, lng) {
+                this.map = new google.maps.Map(document.getElementById('map'), {
+                    center: { lat, lng },
+                    zoom: 18,
+                });
+
+                this.placesService = new google.maps.places.PlacesService(this.map);
+
+                // 現在地マーカーの表示
+                this.setCurrentLocationMarker(lat, lng);
+
+                // クリックイベント
+                this.map.addListener('click', (e) => {
+                    const clickedLat = e.latLng.lat();
+                    const clickedLng = e.latLng.lng();
+                    this.handleMapClick(clickedLat, clickedLng);
+                });
+
+                // 駐輪場検索
+                this.searchNearbyParking(lat, lng);
+            },
+
+            setCurrentLocationMarker(lat, lng) {
+                if (this.currentLocationMarker) {
+                    this.currentLocationMarker.setMap(null);
+                }
+                this.currentLocationMarker = new google.maps.Marker({
+                    map: this.map,
+                    position: { lat, lng },
+                    icon: {
+                        url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+                    },
+                    title: "現在地",
+                });
+                this.updateFormFields(lat, lng);
+            },
+
+            handleMapClick(lat, lng) {
+                this.map.panTo({ lat, lng });
+                this.searchNearbyParking(lat, lng);
+            },
+
+            searchNearbyParking(lat, lng) {
+                const request = {
+                    location: new google.maps.LatLng(lat, lng),
+                    radius: 2000, // 2km以内
+                    keyword: "駐輪場",
+                };
+
+                this.clearParkingMarkers();
+
+                this.placesService.nearbySearch(request, (results, status) => {
+                    if (status === google.maps.places.PlacesServiceStatus.OK) {
+                        results.forEach((place) => this.addParkingMarker(place));
+                    } else {
+                        console.warn("駐輪場の検索に失敗しました:", status);
+                    }
+                });
+            },
+
+            addParkingMarker(place) {
+                const marker = new google.maps.Marker({
+                    map: this.map,
+                    position: place.geometry.location,
+                    title: place.name,
+                });
+
+                marker.addListener("click", () => {
+                    this.showParkingDetails(place);
+                });
+
+                this.parkingMarkers.push(marker);
+            },
+
+            clearParkingMarkers() {
+                this.parkingMarkers.forEach((marker) => marker.setMap(null));
+                this.parkingMarkers = [];
+            },
+
+            showParkingDetails(place) {
+                const { name, vicinity, rating, geometry } = place;
+                const detailsHtml = `
+                    <h3>${name}</h3>
+                    <p>${vicinity}</p>
+                    <p>評価: ${rating || "情報なし"}</p>
+                `;
+                document.getElementById("parking-info").innerHTML = detailsHtml;
+
+                const clickedLat = geometry.location.lat();
+                const clickedLng = geometry.location.lng();
+                this.updateFormFields(clickedLat, clickedLng, name);
+                this.map.panTo(geometry.location);
+            },
+
+            updateFormFields(lat, lng, name="") {
+                document.getElementById("hiddenLat").value = lat;
+                document.getElementById("hiddenLng").value = lng;
+                if(name){
+                    document.getElementById("hiddenName").value = name;
+                }
+            },
+        };
+
+        function initMap() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    ({ coords }) => MapManager.initMap(coords.latitude, coords.longitude),
+                    () => {
+                        alert("現在地の取得に失敗しました。デフォルト位置を使用します。");
+                        MapManager.initMap(35.729493379635535, 139.71086479574538);
+                    }
+                );
+            } else {
+                alert("現在地の取得がサポートされていません。デフォルト位置を使用します。");
+                MapManager.initMap(35.729493379635535, 139.71086479574538);
             }
-        </style>
-
-        <!-- Google Maps API -->
-        <!-- <script>
-            (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
-            key: "{{ $google_map_api_key }}",
-            v: "weekly",
-            });
-        </script> -->
-        <script src="https://maps.googleapis.com/maps/api/js?language=ja&region=JP&key={{$google_map_api_key}}&callback=initMap" async defer></script>
-        <script>
-            var marker = null;
-            var lat = 35.729493379635535;
-            var lng = 139.71086479574538;
-
-            function init() {
-            //初期化
-            var map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 18, center: {lat: lat, lng: lng}
-            });
-
-            document.getElementById('lat').value = lat;
-            document.getElementById('lng').value = lng;
-
-            //初期マーカー
-            marker = new google.maps.Marker({
-                map: map, position: new google.maps.LatLng(lat, lng),
-            });
-
-            //クリックイベント
-            map.addListener('click', function(e) {
-                clickMap(e.latLng, map);
-            });
-
-            // 初期値をフォームに設定
-            updateFormFields(lat, lng);
-
-            }
-
-            function clickMap(geo, map) {
-                lat = geo.lat();
-                lng = geo.lng();
-
-                //小数点以下6桁に丸める場合
-                //lat = Math.floor(lat * 1000000) / 1000000);
-                //lng = Math.floor(lng * 1000000) / 1000000);
-
-                document.getElementById('lat').value = lat;
-                document.getElementById('lng').value = lng;
-
-                //中心にスクロール
-                map.panTo(geo);
-
-                //マーカーの更新
-                marker.setMap(null);
-                marker = null;
-                marker = new google.maps.Marker({
-                    map: map, position: geo
-            });
-                // フォームの緯度・経度を更新
-                updateFormFields(lat, lng);
-            }
-
-            function updateFormFields(latitude, longitude) {
-                // console.log('set_value');
-                document.getElementById('hiddenLat').value = latitude;
-                document.getElementById('hiddenLng').value = longitude;
-            }
-
-        </script>
-
-        <body onload="javascript:init();">
-
-            <p>投稿する場所を選んでください</p>
-            <div id="map" style="margin-top: 10px; margin-bottom:15px;"></div>
-            緯度：<input type="text" id="lat" name="lat" value="" size="20"> 経度：<input type="text" id="lng" name="lng" value="" size="20">
-            <form action="/create_suspicious_report" method="get">
-                <input type="hidden" id="hiddenLat" name="spot[latitude]">
-                <input type="hidden" id="hiddenLng" name="spot[longitude]">
-                <button type="submit">投稿ページへ</button>
-            </form>
-        </body>
-    </x-app-layout>
+        }
+    </script>
+</body>
+</x-app-layout>
 </html>
