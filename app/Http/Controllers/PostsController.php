@@ -34,8 +34,11 @@ class PostsController extends Controller
         $mySuspiciousReports = $user->suspiciousReports;
         $mySafetyReports = $user->safetyReports;
 
+        // .envのAPIキーを変数へ
+        $api_key = config('app.api_key');
+
         // dd($mySafetyReports);
-        return view('posts.my_posts', compact('myIncidentReports', 'mySuspiciousReports', 'mySafetyReports'));
+        return view('posts.my_posts', compact('myIncidentReports', 'mySuspiciousReports', 'mySafetyReports','api_key'));
     }
 
 

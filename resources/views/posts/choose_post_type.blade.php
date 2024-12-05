@@ -35,7 +35,7 @@
                                 <div class="card-body">
                                     <h5 class="card-title">不審者・不審物の報告</h5>
                                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                    <a href="/create_suspicious_report" class="btn btn-primary">投稿する</a>
+                                    <a href="/choose_suspicious_spot" class="btn btn-primary">投稿する</a>
                                 </div>
                             </div>
                         </div>
@@ -45,15 +45,12 @@
                                 <div class="card-body">
                                     <h5 class="card-title">安全な駐輪場情報の共有</h5>
                                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                    <a href="/create_safety_report" class="btn btn-primary">投稿する</a>
+                                    <a href="/choose_safety_spot" class="btn btn-primary">投稿する</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- <h2><a href="/create_incident_report">被害報告</a></h2>
-                <h2><a href="/create_suspicious_report">不審者・不審物の報告</a></h2>
-                <h2><a href="/create_safety_report">安全な駐輪場情報の共有</a></h2> -->
             </div>
         </body>
     </x-app-layout>

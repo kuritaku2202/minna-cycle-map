@@ -12,6 +12,7 @@
             投稿作成（被害報告）
         </x-slot>
         <body>
+            spot
             <div class="container">
                 <!-- Content here -->
                 <form action="/create_incident_report" method="post">
@@ -30,7 +31,7 @@
                     <div class="date">
                         <h2>被害を受けた日付</h2>
                         <p class="date_error" style="color:red">{{ $errors->first('incidentReport.date') }}</p>
-                        <input type="date" name="incidentReport[date]"/>
+                        <input type="date" name="incidentReport[date]" value="{{old('incidentReport.date')}}"/>
                     </div>
                     <div class="time_slot">
                         <h2>被害を受けた時間帯</h2>

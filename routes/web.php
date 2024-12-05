@@ -73,6 +73,7 @@ Route::controller(SuspiciousReportController::class)->middleware(['auth'])->grou
     Route::delete('/suspicious_reports/{suspiciousReport}','delete');
     Route::get('/create_suspicious_report','create')->name('create_suspicious_report');
     Route::post('/create_suspicious_report', 'store');
+    Route::get('/choose_suspicious_spot', 'chooseSuspiciousSpot');
 });
 
 Route::controller(SafetyReportController::class)->middleware(['auth'])->group(function(){
@@ -83,4 +84,5 @@ Route::controller(SafetyReportController::class)->middleware(['auth'])->group(fu
     Route::delete('/safety_reports/{safetyReport}','delete');
     Route::get('/create_safety_report','create')->name('create_safety_report');
     Route::post('/create_safety_report', 'store');
+    Route::get('/choose_safety_spot', 'chooseSafetySpot');
 });

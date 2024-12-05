@@ -13,8 +13,8 @@ class Controller extends BaseController
     public function home(){
 
         // .envのAPIキーを変数へ
-        $api_key = config('app.api_key');
-        return view('posts.home')->with(['api_key' => $api_key]);
+        $google_map_api_key = config('app.google_map_api_key');
+        return view('posts.home')->with(['google_map_api_key' => $google_map_api_key]);
 
     }
 }

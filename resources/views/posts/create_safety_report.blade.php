@@ -19,10 +19,18 @@
                     <div class="user">
                         <input type="hidden" name="safetyReport[user_id]" value="{{ Auth::user()->id }}">
                     </div>
+                    <div class="spot">
+                        <input type="hidden" name="safetyReport[spot_id]" value="{{ $spot->id }}">
+                    </div>
+
+                    <!-- URLから渡された緯度と経度を表示 -->
+                    <p>緯度: {{ $spot->latitude }}</p>
+                    <p>経度: {{ $spot->longitude }}</p>
+
                     <div class="date">
                         <h2>駐輪場の訪問日</h2>
                         <p class="date_error" style="color:red">{{ $errors->first('safetyReport.date') }}</p>
-                        <input type="date" name="safetyReport[date]"/>
+                        <input type="date" name="safetyReport[date]" value="{{old('safetyReport.date')}}"/>
                     </div>
                     <div class="time_slot">
                         <h2>訪問した時間帯</h2>
@@ -61,7 +69,7 @@
                     </div>
                     <div class="description">
                         <h2>その他の情報</h2>
-                        <textarea name="safetyReport[description]"  placeholder="その他の情報を入力してください"></textarea>
+                        <textarea name="safetyReport[description]"  placeholder="その他の情報を入力してください">{{old('safetyReport.description')}}</textarea>
                     </div>
                     <input type="submit" value="投稿する"/>
                 </form>

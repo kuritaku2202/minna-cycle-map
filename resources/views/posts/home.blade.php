@@ -105,7 +105,7 @@
                 background-color: #d9534f;
             }
             </style>
-            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyClfznW0DwXyNBbAm_IoZGm4CskZ5shFfY&libraries=places"></script>
+            <script src="https://maps.googleapis.com/maps/api/js?key={{$google_map_api_key}}&libraries=places"></script>
         <script>
             // function initMap() {
             //     map = document.getElementById("map");
@@ -183,7 +183,7 @@
         </script>
         <script src="{{ asset('js/home.script.js') }}" defer></script>
         <!-- Google Maps APIの読み込み（keyには自分のAPI_KEYを指定） -->
-        <script src="https://maps.googleapis.com/maps/api/js?language=ja&region=JP&key=AIzaSyClfznW0DwXyNBbAm_IoZGm4CskZ5shFfY&callback=initMap" async defer></script>
+        <script src="https://maps.googleapis.com/maps/api/js?language=ja&region=JP&key={{$google_map_api_key}}&callback=initMap" async defer></script>
     <script></script>
     </body>
 </x-app-layout>

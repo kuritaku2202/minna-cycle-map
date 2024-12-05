@@ -6,6 +6,7 @@ use App\Http\Requests\SafetyReportRequest;
 use Illuminate\Http\Request;
 use App\Models\SafetyReport;
 use App\Models\TimePeriod;
+use App\Models\Spot;
 use App\Models\SecurityCamera;
 use App\Models\SecurityStaff;
 
@@ -35,8 +36,15 @@ class SafetyReportController extends Controller
     }
 
     //投稿作成画面で使用
-    public function create(TimePeriod $timePeriod){
-        return view('posts.create_safety_report')->with(['timePeriods'=>$timePeriod->get()]);
+    public function chooseSafetySpot(){
+        $google_map_api_key = config('app.google_map_api_key');
+        return view('posts.choose_safety_spot')->with(['google_map_api_key'=>$google_map_api_key]);
+    }
+    public function create(TimePeriod $timePeriod, Request $request,Spot $spot){
+        $input=$request['spot'];
+        $spot->fill($input)->save();
+
+        return view('posts.create_safety_report')->with(['timePeriods'=>$timePeriod->get(),'spot'=>$spot]);
     }
     public function store(SafetyReportRequest $request, SafetyReport $safetyReport){
         $input = $request['safetyReport'];
