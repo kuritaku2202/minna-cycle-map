@@ -16,6 +16,7 @@
         </x-slot>
             <body>
                 <div class="content">
+                    <h1 class="name">{{ $post->spot->name }}</h1>
                     <form action="/safety_reports/{{ $post->id }}" method="post">
                         @csrf
                         @method('put')

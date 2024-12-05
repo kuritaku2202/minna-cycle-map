@@ -12,7 +12,6 @@
             投稿作成（被害報告）
         </x-slot>
         <body>
-            spot
             <div class="container">
                 <!-- Content here -->
                 <form action="/create_incident_report" method="post">
@@ -23,10 +22,8 @@
                     <div class="spot">
                         <input type="hidden" name="incidentReport[spot_id]" value="{{ $spot->id }}">
                     </div>
-                    
-                    <!-- URLから渡された緯度と経度を表示 -->
-                        <p>緯度: {{ $spot->latitude }}</p>
-                        <p>経度: {{ $spot->longitude }}</p>
+                    <!-- 選択したスポット名 -->
+                    <h1>{{ $spot->name }}</h1>
 
                     <div class="date">
                         <h2>被害を受けた日付</h2>

@@ -15,7 +15,8 @@
             投稿詳細
         </x-slot>
             <body>
-                <h1 class="date">[訪問日]:{{ $post->date }}</h1>
+                <h1 class="name">{{$post->spot->name }}</h1>
+                <h2 class="date">[訪問日]:{{ $post->date }}</h2>
                 <h2 class="time_slot">[時間帯]:{{ $post->timePeriod->time_slot}}</h2>
                 <h2 class="security_staff">[監視員]{{ $post->securityStaff->status }}</h2>
                 <h2 class="security_camera">[防犯カメラ]{{ $post->securityCamera->status}}</h2>

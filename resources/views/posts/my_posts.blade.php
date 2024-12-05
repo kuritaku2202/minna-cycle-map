@@ -26,7 +26,8 @@
                                 <div class="card" style="width: 18rem;">
                                     <img src="..." class="card-img-top" alt="...">
                                     <div class="card-body">
-                                        <h2 class="card-title">[被害に遭った日]:{{ $post->date }}</h2>
+                                        <h1 class="card-title">{{ $post->spot->name}}</h1>
+                                        <h2 class="card-text">[被害に遭った日]:{{ $post->date }}</h2>
                                         <h3 class="card-text">[時間帯]:{{ $post->timePeriod->time_slot}}</h3>
                                         <h3>[詳細]</h3>
                                         <p class="card-text">{{ $post->description}}</p>
@@ -49,7 +50,8 @@
                                 <div class="card" style="width: 18rem;">
                                     <img src="..." class="card-img-top" alt="...">
                                     <div class="card-body">
-                                        <h2 class="card-title">[目撃日]:{{ $post->date }}</h2>
+                                        <h1 class="card-title">{{ $post->spot->name}}</h1>
+                                        <h2 class="card-text">[目撃日]:{{ $post->date }}</h2>
                                         <h3 class="card-text">[時間帯]:{{ $post->timePeriod->time_slot}}</h3>
                                         <h3>[詳細]</h3>
                                         <p class="card-text">{{ $post->description}}</p>
@@ -72,7 +74,8 @@
                                 <div class="card" style="width: 18rem;">
                                     <img src="..." class="card-img-top" alt="...">
                                     <div class="card-body">
-                                        <h2 class="card-title">[訪問日]:{{ $post->date }}</h2>
+                                        <h1 class="card-title">{{ $post->spot->name}}</h1>
+                                        <h2 class="card-text">[訪問日]:{{ $post->date }}</h2>
                                         <h3 class="card-text">[時間帯]:{{ $post->timePeriod->time_slot}}</h3>
                                         <h3 class="card-text">[監視員]{{ $post->securityStaff->status }}</h3>
                                         <h3 class="card-text">[防犯カメラ]{{ $post->securityCamera->status }}</h3>

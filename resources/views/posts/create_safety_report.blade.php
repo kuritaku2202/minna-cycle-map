@@ -23,9 +23,8 @@
                         <input type="hidden" name="safetyReport[spot_id]" value="{{ $spot->id }}">
                     </div>
 
-                    <!-- URLから渡された緯度と経度を表示 -->
-                    <p>緯度: {{ $spot->latitude }}</p>
-                    <p>経度: {{ $spot->longitude }}</p>
+                    <!-- 選択したスポット名 -->
+                    <h1>{{ $spot->name }}</h1>
 
                     <div class="date">
                         <h2>駐輪場の訪問日</h2>

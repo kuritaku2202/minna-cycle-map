@@ -6,17 +6,95 @@ const posts = [
     { id: 3, type: 'safe', title: '安全駐輪場C', content: '安全な駐輪場です', position: { lat: 35.6892, lng: 139.6900 } },
 ];
 
-// 初期化
-function initMap() {
-    map = new google.maps.Map(document.getElementById('map'), {
-        center: { lat: 35.6895, lng: 139.6917 },
-        zoom: 14,
-        mapTypeControl: false,
-        streetViewControl: false,
-    });
+// // 初期化
+// function initMap() {
+//     map = new google.maps.Map(document.getElementById('map'), {
+//         center: { lat: 35.6895, lng: 139.6917 },
+//         zoom: 14,
+//         mapTypeControl: false,
+//         streetViewControl: false,
+//     });
 
-    addMarkers();
-}
+//     addMarkers();
+// }
+<div class="map-container" id="map"></div>
+
+    let service;
+    let userMarker;
+
+    function initMap() {
+        // 地図を初期化
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: { lat: 35.0, lng: 135.0 }, // 初期位置（仮）
+            zoom: 15,
+        });
+
+        // 現在地を取得
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    const userLocation = {
+                        lat: pos.coords.latitude,
+                        lng: pos.coords.longitude
+                    };
+
+                    // 現在地にピンを刺す
+                    userMarker = new google.maps.Marker({
+                        position: userLocation,
+                        map: map,
+                        icon: {
+                            url: 'https://higemura.com/wordpress/wp-content/uploads/2018/10/ic_gmap_mylocation.svg',
+                            scaledSize: new google.maps.Size(32, 32)
+                        },
+                        title: '現在地'
+                    });
+
+                    // 地図の中心を現在地に移動
+                    map.setCenter(userLocation);
+
+                    // 半径5キロ以内の駐輪場を検索
+                    searchNearby(userLocation);
+                },
+                (err) => {
+                    console.error("位置情報の取得に失敗しました: ", err);
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 5000,
+                    maximumAge: 0
+                }
+            );
+        } else {
+            console.error("ブラウザが位置情報APIに対応していません。");
+        }
+    }
+
+    function searchNearby(location) {
+        // Places APIで駐輪場を検索
+        const request = {
+            location: location,
+            radius: 5000, // 半径5キロ（メートル単位）
+            keyword: '駐輪場'
+        };
+
+        service = new google.maps.places.PlacesService(map);
+        service.nearbySearch(request, (results, status) => {
+            if (status === google.maps.places.PlacesServiceStatus.OK) {
+                results.forEach((place) => {
+                    // 駐輪場の位置にピンを刺す
+                    new google.maps.Marker({
+                        position: place.geometry.location,
+                        map: map,
+                        title: place.name,
+                    });
+
+                    console.log(`駐輪場名: ${place.name}, 位置: ${place.geometry.location}`);
+                });
+            } else {
+                console.error("駐輪場の検索に失敗しました: ", status);
+            }
+        });
+    }
 
 // マーカーを追加
 function addMarkers() {
