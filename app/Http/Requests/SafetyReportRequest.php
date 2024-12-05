@@ -24,8 +24,8 @@ class SafetyReportRequest extends FormRequest
         return [
             'safetyReport.date'=>'required|date|before_or_equal:today',
             'safetyReport.time_period_id'=>'required',
-            'safetyReport.security_staff'=>'required',
-            'safetyReport.security_camera'=>'required',
+            'safetyReport.security_staff_id'=>'required',
+            'safetyReport.security_camera_id'=>'required',
         ];
     }
 
@@ -35,8 +35,8 @@ class SafetyReportRequest extends FormRequest
             'safetyReport.date.required'=>'必須項目です',
             'safetyReport.date.before_or_equal:today'=>'今日以前の日付を入力してください',
             'safetyReport.time_period_id.required'=>'必須項目です',
-            'safetyReport.security_staff.required'=>'必須項目です',
-            'safetyReport.security_camera.required'=>'必須項目です',
+            'safetyReport.security_staff_id.required'=>'必須項目です',
+            'safetyReport.security_camera_id.required'=>'必須項目です',
         ];
     }
 }

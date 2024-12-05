@@ -19,6 +19,15 @@
                     <div class="user">
                         <input type="hidden" name="suspiciousReport[user_id]" value="{{ Auth::user()->id }}">
                     </div>
+                    <div class="spot">
+                        <input type="hidden" name="suspiciousReport[spot_id]" value="{{ $spot->id }}">
+                    </div>
+
+
+                    <!-- URLから渡された緯度と経度を表示 -->
+                    <p>緯度: {{ $spot->latitude }}</p>
+                    <p>経度: {{ $spot->longitude }}</p>
+
                     <div class="date">
                         <h2>目撃した日付</h2>
                         <p class="date_error" style="color:red">{{ $errors->first('suspiciousReport.date') }}</p>

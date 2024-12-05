@@ -85,7 +85,7 @@
             <p>投稿する場所を選んでください</p>
             <div id="map" style="margin-top: 10px; margin-bottom:15px;"></div>
             緯度：<input type="text" id="lat" name="lat" value="" size="20"> 経度：<input type="text" id="lng" name="lng" value="" size="20">
-            <form action="/create_incident_report" method="get">
+            <form action="/create_safety_report" method="get">
                 <input type="hidden" id="hiddenLat" name="spot[latitude]">
                 <input type="hidden" id="hiddenLng" name="spot[longitude]">
                 <button type="submit">投稿ページへ</button>

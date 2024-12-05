@@ -37,8 +37,8 @@ class IncidentReportController extends Controller
 
     //投稿作成画面で使用
     public function chooseIncidentSpot(){
-        $api_key = config('app.api_key');
-        return view('posts.choose_incident_spot')->with(['api_key'=>$api_key]);
+        $google_map_api_key = config('app.google_map_api_key');
+        return view('posts.choose_incident_spot')->with(['google_map_api_key'=>$google_map_api_key]);
     }
     public function create(TimePeriod $timePeriod,Request $request, Spot $spot){
         $input=$request['spot'];

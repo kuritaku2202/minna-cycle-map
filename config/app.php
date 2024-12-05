@@ -189,6 +189,6 @@ return [
     ])->toArray(),
 
     // Google Map API
-    'api_key'=>env('API_KEY'),
+    'google_map_api_key'=>env('GOOGLE_MAP_API_KEY'),
 
 ];
