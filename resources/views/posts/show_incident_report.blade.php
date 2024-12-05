@@ -20,6 +20,21 @@
                 <p class="description">[詳細]:{{ $post->description}}</p>
                 <a href="/incident_reports/{{ $post->id }}/edit">編集</a>
                 <a href="/my_posts">戻る</a>
+                <form action="/incident_reports/{{ $post->id }}" id="form_{{ $post->id }}" method="post">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button" onclick="deletePost({{ $post->id }})">削除</button>
+                </form>
+
+                <script>
+                    function deletePost(id) {
+                        'use strict'
+
+                        if (confirm('削除すると復元できません。\n本当に削除しますか？')) {
+                            document.getElementById(`form_${id}`).submit();
+                        }
+                    }
+                </script>
 
             </body>
     </x-app-layout>

@@ -39,4 +39,10 @@ class SuspiciousReportController extends Controller
         $suspiciousReport -> fill($input)->save();
         return redirect('/suspicious_reports');
     }
+
+    public function delete(SuspiciousReport $suspiciousReport){
+        $suspiciousReport->delete();
+        return redirect('/my_posts');
+        }
+
 }

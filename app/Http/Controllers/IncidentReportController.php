@@ -53,5 +53,9 @@ class IncidentReportController extends Controller
         return redirect('/incident_reports/'.$incidentReport->id);
     }
 
+    public function delete(IncidentReport $incidentReport){
+    $incidentReport->delete();
+    return redirect('/my_posts');
+    }
 
 }

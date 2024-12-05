@@ -67,10 +67,9 @@
                             <h2>その他の情報</h2>
                             <input type="text" name="safetyReport[description]"  value="{{ $post->description}}"></input>
                         </div>
-                        <input type="submit" value="投稿する"/>
+                        <input type="submit" value="保存する"/>
                         <a href="/safety_reports/{{ $post->id }}">戻る</a>
                     </form>
-                </div>
             </body>
     </x-app-layout>
 </html>

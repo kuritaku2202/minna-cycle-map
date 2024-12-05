@@ -43,4 +43,10 @@ class SafetyReportController extends Controller
         $safetyReport -> fill($input)->save();
         return redirect('/safety_reports');
     }
+
+    public function delete(SafetyReport $safetyReport){
+        $safetyReport->delete();
+        return redirect('/my_posts');
+        }
+
 }
