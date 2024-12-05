@@ -38,10 +38,9 @@
                             <p class="description_error" style="color:red">{{ $errors->first('incidentReport.description') }}</p>
                             <input type="text" name="incidentReport[description]"  value="{{ $post->description}}"></input>
                         </div>
-                        <input type="submit" value="投稿する"/>
+                        <input type="submit" value="保存する"/>
                         <a href="/incident_reports/{{ $post->id }}">戻る</a>
                     </form>
-                </div>
             </body>
     </x-app-layout>
 </html>
