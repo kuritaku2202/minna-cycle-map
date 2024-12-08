@@ -7,15 +7,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <style>
-        /* 地図コンテナ */
         .map-container {
             width: 100%;
             height: 90%;
             margin-top: auto;
             position: absolute;
         }
-
-        /* サイドバー */
         .sidebar {
             width: 300px;
             height: 100vh;
@@ -28,17 +25,13 @@
             padding: 15px;
             overflow-y: auto;
         }
-
         .sidebar h2 {
             margin-top: 0;
         }
-
-        /* 投稿リスト */
         .post-list {
             list-style-type: none;
             padding: 0;
         }
-
         .post-list li {
             background-color: #ffffff;
             padding: 10px;
@@ -46,7 +39,6 @@
             border: 1px solid #ddd;
             border-radius: 5px;
         }
-
         .search-button {
             position: absolute;
             margin-top: auto;
@@ -59,144 +51,120 @@
             border-radius: 5px;
             cursor: pointer;
         }
-
         .search-button:hover {
             background-color: #0056b3;
         }
     </style>
-    <!-- Google Maps APIの読み込み -->
-    <script src="https://maps.googleapis.com/maps/api/js?key={{$google_map_api_key}}&libraries=places&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?language=ja&region=JP&key={{$google_map_api_key}}&libraries=places&callback=initMap" async defer></script>
 </head>
 <x-app-layout>
-<body>
-    <!-- 左サイドバー -->
-    <div class="sidebar">
-        <h2>最近の投稿</h2>
-        <ul id="post-list" class="post-list">
-            <!-- 投稿一覧はここに表示される -->
-        </ul>
-    </div>
+    <body>
+        <div class="sidebar">
+            <h2>最近の投稿</h2>
+            <ul id="post-list" class="post-list">
+                <!-- 投稿一覧はここに表示される -->
+            </ul>
+        </div>
 
-    <!-- 地図表示エリア -->
-    <div class="map-container" id="map"></div>
-    <button class="search-button" id="search-button">このエリアを再検索</button>
+        <div class="map-container" id="map"></div>
+        <script>
+            const MapManager = {
+                map: null,
+                currentLocationMarker: null,
+                parkingMarkers: [],
+                placesService: null,
 
-    <script>
-        let map;
-        let service;
-        let userMarker;
-        let markers = []; // 現在のマーカーを保持する配列
+                initMap(lat, lng) {
+                    this.map = new google.maps.Map(document.getElementById('map'), {
+                        center: { lat, lng },
+                        zoom: 16,
+                    });
 
-        // 仮の投稿データ
-        const posts = [
-            { id: 1, title: "投稿タイトル1", description: "詳細情報1" },
-            { id: 2, title: "投稿タイトル2", description: "詳細情報2" },
-            { id: 3, title: "投稿タイトル3", description: "詳細情報3" }
-        ];
+                    this.placesService = new google.maps.places.PlacesService(this.map);
 
-        // 投稿リストの表示
-        function displayPosts() {
-            const postListElement = document.getElementById('post-list');
-            postListElement.innerHTML = ''; // 既存の投稿をクリア
+                    this.setCurrentLocationMarker(lat, lng);
 
-            posts.forEach(post => {
-                const li = document.createElement('li');
-                li.innerHTML = `<strong>${post.title}</strong><br>${post.description}`;
-                postListElement.appendChild(li);
-            });
-        }
+                    this.map.addListener('click', (e) => {
+                        const clickedLat = e.latLng.lat();
+                        const clickedLng = e.latLng.lng();
+                        this.handleMapClick(clickedLat, clickedLng);
+                    });
 
-        function initMap() {
-            // 地図を初期化
-            map = new google.maps.Map(document.getElementById('map'), {
-                center: { lat: 35.0, lng: 135.0 }, // 初期位置（仮）
-                zoom: 15,
-            });
+                    this.searchNearbyParking(lat, lng);
+                },
 
-            // 現在地を取得
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (pos) => {
-                        const userLocation = {
-                            lat: pos.coords.latitude,
-                            lng: pos.coords.longitude
-                        };
-
-                        // 現在地にピンを刺す
-                        userMarker = new google.maps.Marker({
-                            position: userLocation,
-                            map: map,
-                            icon: {
-                                url: '/Users/KuriharaTakuma/Downloads/iconDownload.cgi.png',
-                                scaledSize: new google.maps.Size(32, 32)
-                            },
-                            title: '現在地'
-                        });
-
-                        // 地図の中心を現在地に移動
-                        map.setCenter(userLocation);
-
-                        // 半径5キロ以内の駐輪場を検索
-                        searchNearby(userLocation);
-                    },
-                    (err) => {
-                        console.error("位置情報の取得に失敗しました: ", err);
-                    },
-                    {
-                        enableHighAccuracy: true,
-                        timeout: 5000,
-                        maximumAge: 0
+                setCurrentLocationMarker(lat, lng) {
+                    if (this.currentLocationMarker) {
+                        this.currentLocationMarker.setMap(null);
                     }
-                );
-            } else {
-                console.error("ブラウザが位置情報APIに対応していません。");
-            }
+                    this.currentLocationMarker = new google.maps.Marker({
+                        map: this.map,
+                        position: { lat, lng },
+                        icon: {
+                            url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+                        },
+                        title: "現在地",
+                    });
+                },
 
-            // 投稿データを表示
-            displayPosts();
+                handleMapClick(lat, lng) {
+                    this.map.panTo({ lat, lng });
+                    this.searchNearbyParking(lat, lng);
+                },
 
-            // 再検索ボタンのイベントリスナー
-            document.getElementById('search-button').addEventListener('click', () => {
-                const center = map.getCenter(); // マップの中心を取得
-                searchNearby({ lat: center.lat(), lng: center.lng() });
-            });
-        }
+                searchNearbyParking(lat, lng) {
+                    const request = {
+                        location: new google.maps.LatLng(lat, lng),
+                        radius: 1500,
+                        keyword: "駐輪場",
+                    };
 
-        function clearMarkers() {
-            // 現在のマーカーを削除
-            markers.forEach(marker => marker.setMap(null));
-            markers = [];
-        }
+                    this.clearParkingMarkers();
 
-        function searchNearby(location) {
-            const request = {
-                location: location,
-                keyword: '駐輪場',
-                rankBy: google.maps.places.RankBy.DISTANCE, // 近い順に取得
-                language:'ja',
+                    this.placesService.nearbySearch(request, (results, status) => {
+                        if (status === google.maps.places.PlacesServiceStatus.OK) {
+                            results.forEach((place) => this.addParkingMarker(place));
+                        } else {
+                            console.warn("駐輪場の検索に失敗しました:", status);
+                        }
+                    });
+                },
+
+                addParkingMarker(place) {
+                    const marker = new google.maps.Marker({
+                        map: this.map,
+                        position: place.geometry.location,
+                        title: place.name,
+                    });
+                    // マーカーがクリックされたときに地図をその位置に移動
+                    marker.addListener('click', () => {
+                        this.map.panTo(marker.getPosition());
+                    });
+
+                    this.parkingMarkers.push(marker);
+                },
+
+                clearParkingMarkers() {
+                    this.parkingMarkers.forEach((marker) => marker.setMap(null));
+                    this.parkingMarkers = [];
+                },
             };
 
-            clearMarkers(); // 既存のマーカーをクリア
-
-            service = new google.maps.places.PlacesService(map);
-            service.nearbySearch(request, (results, status) => {
-                if (status === google.maps.places.PlacesServiceStatus.OK) {
-                    // 結果を最大20件まで処理
-                    const fragment = document.createDocumentFragment();
-                    results.slice(0, 20).forEach((place) => {
-                        const marker = new google.maps.Marker({
-                            position: place.geometry.location,
-                            map: map,
-                            title: place.name,
-                        });
-                        markers.push(marker); // マーカーを配列に保存
-                    });
+            function initMap() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        ({ coords }) => MapManager.initMap(coords.latitude, coords.longitude),
+                        () => {
+                            alert("現在地の取得に失敗しました。デフォルト位置を使用します。");
+                            MapManager.initMap(35.729493379635535, 139.71086479574538);
+                        }
+                    );
                 } else {
-                    console.error(`検索失敗: ${status}`);
+                    alert("現在地の取得がサポートされていません。デフォルト位置を使用します。");
+                    MapManager.initMap(35.729493379635535, 139.71086479574538);
                 }
-            });
-        }
-    </script>
-</body>
+            }
+        </script>
+    </body>
 </x-app-layout>
 </html>
