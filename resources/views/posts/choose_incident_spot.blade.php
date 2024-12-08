@@ -40,7 +40,7 @@
             initMap(lat, lng) {
                 this.map = new google.maps.Map(document.getElementById('map'), {
                     center: { lat, lng },
-                    zoom: 18,
+                    zoom: 16,
                 });
 
                 this.placesService = new google.maps.places.PlacesService(this.map);
@@ -82,7 +82,7 @@
             searchNearbyParking(lat, lng) {
                 const request = {
                     location: new google.maps.LatLng(lat, lng),
-                    radius: 2000, // 2km以内
+                    radius: 1500, // 1.5km以内
                     keyword: "駐輪場",
                 };
 

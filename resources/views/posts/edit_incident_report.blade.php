@@ -29,7 +29,7 @@
                             <h2>被害を受けた時間帯</h2>
                             @foreach ($timePeriods as $timePeriod)
                                 <input type="radio" name="incidentReport[time_period_id]" value="{{ $timePeriod->id }}"
-                                {{ old('incidentReport.time_period_id') == $timePeriod->id ? 'checked' : '' }}>
+                                {{ $post->time_period_id == $timePeriod->id ? 'checked' : '' }}>
                                 {{ $timePeriod->time_slot }}
                                 </input><br>
                             @endforeach
