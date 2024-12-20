@@ -19,6 +19,15 @@
                 <h2 class="date">[被害にあった日]:{{ $post->date }}</h2>
                 <h2 class="time_slot">[時間帯]:{{ $post->timePeriod->time_slot}}</h2>
                 <p class="description">[詳細]:{{ $post->description}}</p>
+                @if($post->incidentReportImages->isNotEmpty())
+                    <h2>写真</h2>
+                        @foreach($post->incidentReportImages as $image)
+                            <div>
+                                <img src="{{ $image->image_url }}" alt="Incident Report Image" style="max-width: 50%; height: auto;">
+                                <a href="{{ $image->image_url }}" target="_blank">写真を拡大</a>
+                            </div>
+                        @endforeach
+                @endif
                 <a href="/incident_reports/{{ $post->id }}/edit">編集</a>
                 <a href="/my_posts">戻る</a>
                 <form action="/incident_reports/{{ $post->id }}" id="form_{{ $post->id }}" method="post">

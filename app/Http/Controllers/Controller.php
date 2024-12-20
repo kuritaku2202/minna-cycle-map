@@ -38,7 +38,7 @@ class Controller extends BaseController
 
         // .envのAPIキーを変数へ
         $google_map_api_key = config('app.google_map_api_key');
-        return view('posts.experiment')->with(['google_map_api_key' => $google_map_api_key]);
+        return view('posts.home_experiment')->with(['google_map_api_key' => $google_map_api_key]);
 
     }
 

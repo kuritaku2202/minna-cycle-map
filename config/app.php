@@ -1,6 +1,5 @@
 <?php
 
-use CloudinaryLabs\CloudinaryLaravel\CloudinaryServiceProvider;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
@@ -170,7 +169,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         //cloudinaryAPIキー
-        CloudinaryLabs\CloudinaryLaravel\CloudinaryServiceProvider::class,
+        CloudinaryLabs\CloudinaryLaravel\CloudinaryServiceProvider::class, //この行を追加
     ])->toArray(),
 
     /*
@@ -190,5 +189,8 @@ return [
 
     // Google Map API
     'google_map_api_key'=>env('GOOGLE_MAP_API_KEY'),
+
+    // Cloudinary API
+    'cloudinary_url' => env('CLOUDINARY_URL'),
 
 ];
