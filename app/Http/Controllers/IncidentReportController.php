@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests\IncidentReportRequest;
 use Illuminate\Http\Request;
 use App\Models\IncidentReport;
+use App\Models\IncidentReportImage;
 use App\Models\TimePeriod;
 use App\Models\Spot;
+use Cloudinary;
 
 class IncidentReportController extends Controller
 {
@@ -47,9 +50,53 @@ class IncidentReportController extends Controller
         return view('posts.create_incident_report')->with(['timePeriods'=>$timePeriod->get(),'spot'=>$spot]);
     }
 
-    public function store(IncidentReportRequest $request, IncidentReport $incidentReport){
-        $input = $request['incidentReport'];
-        $incidentReport -> fill($input)->save();
+    public function store(incidentReportRequest $request, IncidentReport $incidentReport,){
+        // $input = $request['incidentReport'];
+        // $incidentReport -> fill($input)->save();
+
+        // //画像添付時のみcloudinaryへ画像を送信し、画像のURLを$image_urlに代入している
+        // if($files = $request->file('files')){
+        //     if(!is_null($files)){
+        // $image_url = Cloudinary::upload($request->file('image')->getRealPath())->getSecurePath();
+        // $incidentReportImage = $incidentReport->incidentReportImages()->create([
+        //     'image_url' => $image_url,
+        // ]);
+        // }
+        // インプットのデータをフィルし、保存
+    // $input = request()->all();
+    // dd($input);
+    $input = $request['incidentReport'];
+    $incidentReport->fill($input)->save();
+
+    // 画像がアップロードされた場合のみ処理
+    if ($files = $request->file('files')) {
+        // トランザクションを開始
+        DB::beginTransaction();
+
+        try {
+            // 各ファイルをCloudinaryにアップロードし、画像URLを保存
+            foreach ($files as $file) {
+                $image_url = Cloudinary::upload($file->getRealPath())->getSecurePath();
+
+                // 画像をIncidentReportImageとして保存
+                $incidentReport->incidentReportImages()->create([
+                    'image_url' => $image_url,
+                ]);
+            }
+
+            // トランザクションをコミット
+            DB::commit();
+
+            // 成功した場合のリダイレクト
+            return redirect('/incident_reports/' . $incidentReport->id)->with(['message' => '報告書と画像が正常に保存されました。', 'status' => 'info']);
+        } catch (\Exception $e) {
+            // エラーが発生した場合、ロールバック
+            DB::rollBack();
+
+            // エラーメッセージ
+            return redirect('/incident_reports/' . $incidentReport->id)->with(['message' => '画像の保存に失敗しました。再試行してください。', 'status' => 'danger']);
+        }
+    }
         return redirect('/incident_reports/'.$incidentReport->id);
     }
 

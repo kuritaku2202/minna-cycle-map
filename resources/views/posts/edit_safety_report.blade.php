@@ -29,7 +29,7 @@
                             <h2>訪問した時間帯</h2>
                             @foreach ($timePeriods as $timePeriod)
                                 <input type="radio" name="safetyReport[time_period_id]" value="{{ $timePeriod->id }}"
-                                {{ old('safetyReport.time_period_id') == $timePeriod->id ? 'checked' : '' }}>
+                                {{ $post->time_period_id == $timePeriod->id ? 'checked' : '' }}>
                                 {{ $timePeriod->time_slot }}
                                 </input><br>
                             @endforeach
@@ -37,30 +37,30 @@
                         <div class="security_stuff">
                             <h2>警備スタッフはいましたか？</h2>
                             <input type="radio" name="safetyReport[security_staff_id]" value="1"
-                                {{ old('safetyReport.security_staff_id', $safetyReport->security_staff_id ?? '') == 1 ? 'checked' : '' }}>
+                                {{ $post->security_staff_id == 1 ? 'checked' : '' }}>
                             わからない
                             <br>
                             <input type="radio" name="safetyReport[security_staff_id]" value="2"
-                                {{ old('safetyReport.security_staff_id', $safetyReport->security_staff_id ?? '') == 2 ? 'checked' : '' }}>
+                                {{  $post->security_staff_id == 2 ? 'checked' : '' }}>
                             はい
                             <br>
                             <input type="radio" name="safetyReport[security_staff_id]" value="3"
-                                {{ old('safetyReport.security_staff_id', $safetyReport->security_staff_id ?? '') == 3 ? 'checked' : '' }}>
+                                {{ $post->security_staff_id == 3 ? 'checked' : '' }}>
                             いいえ
                             <br>
                         </div>
                         <div class="security_camera">
                             <h2>防犯カメラはありましたか？</h2>
                             <input type="radio" name="safetyReport[security_camera_id]" value="1" 
-                                {{ old('safetyReport.security_camera_id', $safetyReport->security_camera_id ?? '') == 1 ? 'checked' : '' }} />
+                                {{ $post->security_camera_id == 1 ? 'checked' : '' }} />
                             わからない
                             <br>
                             <input type="radio" name="safetyReport[security_camera_id]" value="2" 
-                                {{ old('safetyReport.security_camera_id', $safetyReport->security_camera_id ?? '') == 2 ? 'checked' : '' }} />
+                                {{ $post->security_camera_id == 2 ? 'checked' : '' }} />
                             はい
                             <br>
                             <input type="radio" name="safetyReport[security_camera_id]" value="3" 
-                                {{ old('safetyReport.security_camera_id', $safetyReport->security_camera_id ?? '') == 3 ? 'checked' : '' }} />
+                                {{ $post->security_camera_id == 3 ? 'checked' : '' }} />
                             いいえ
                             <br>
                         </div>

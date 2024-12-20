@@ -14,7 +14,7 @@
         <body>
             <div class="container">
                 <!-- Content here -->
-                <form action="/create_incident_report" method="post">
+                <form action="/create_incident_report" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="user">
                         <input type="hidden" name="incidentReport[user_id]" value="{{ Auth::user()->id }}">
@@ -44,11 +44,35 @@
                         <p class="description_error" style="color:red">{{ $errors->first('incidentReport.description') }}</p>
                         <textarea name="incidentReport[description]"  placeholder="被害の詳細を入力してください">{{ old('incidentReport.description')}}</textarea>
                     </div>
+                    <div class="image">
+                        <input type="file" name="files[]" multiple>
+                    </div>
                     <input type="submit" value="投稿する"/>
                 </form>
                 <div class="backButton">
                     <a href="/choose_post_type">戻る</a>
                 </div>
+
+
+                <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
+
+                <button id="upload_widget" class="cloudinary-button">Upload Files</button>
+
+                <script type="text/javascript">
+                    document.getElementById('upload_widget').addEventListener('click', function () {
+                        cloudinary.openUploadWidget(
+                            {あ
+                                cloud_name: 'duqc9wdwa',//名前を変数に変える！！
+                                upload_preset: 'minna-cycle-map', //Unsignedモードである必要があります。
+                            },
+                            function (error, result) {
+                                if (!error && result && result.event === 'success') {
+                                console.log('Done! Here is the image info: ', result.info);
+                                }
+                            }
+                        );
+                    }, false);
+                </script>
             </div>
         </body>
     </x-app-layout>
