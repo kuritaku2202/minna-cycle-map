@@ -13,12 +13,24 @@
             margin-top: auto;
             position: absolute;
         }
-        .sidebar {
+        .left-sidebar {
             width: 300px;
             height: 100vh;
             z-index: 9999;
             position: fixed;
             left: 0;
+            margin-top: auto;
+            background-color: #f8f9fa;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            overflow-y: auto;
+        }
+        .right-sidebar {
+            width: 300px;
+            height: 100vh;
+            z-index: 9999;
+            position: fixed;
+            right: 0;
             margin-top: auto;
             background-color: #f8f9fa;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
@@ -69,26 +81,98 @@
 </head>
 <x-app-layout>
     <body>
-        <div class="sidebar">
-            <h2>最近の投稿</h2>
-            <ul id="post-list" class="post-list">
-                <!-- 投稿一覧はここに表示される -->
-            </ul>
+        <div class="left-sidebar">
+            <div class="alert alert-dark" role="alert">
+                最近の投稿
+            </div>
+            <div class="alert alert-primary" role="alert">
+                被害報告
+            </div>
+            <div class="container text-center">
+                <div class="row row-cols-4">
+                        @foreach ($incidentReports as $post )
+                            <div class="col">
+                                <div class="card" style="width: 18rem;">
+                                    <!-- <img src="..." class="card-img-top" alt="..."> -->
+                                    <div class="card-body">
+                                        <h1 class="card-title">{{ $post->spot->name}}</h1>
+                                        <h2 class="card-text">[被害に遭った日]:{{ $post->date }}</h2>
+                                        <h3 class="card-text">[時間帯]:{{ $post->timePeriod->time_slot}}</h3>
+                                        <h3>[詳細]</h3>
+                                        <p class="card-text">{{ $post->description}}</p>
+                                        <a href="/incident_reports/{{ $post->id }}" class="btn btn-primary">詳細</a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                </div>
+            </div>
+
+            <div class="alert alert-primary" role="alert">
+                不審者・不審物情報
+            </div>
+            <div class="container text-center">
+                <div class="row row-cols-4">
+                    @foreach ($suspiciousReports as $post )
+                        <div class="col">
+                            <div class="card" style="width: 18rem;">
+                                <!-- <img src="..." class="card-img-top" alt="..."> -->
+                                <div class="card-body">
+                                    <h1 class="card-title">{{ $post->spot->name}}</h1>
+                                    <h2 class="card-text">[目撃日]:{{ $post->date }}</h2>
+                                    <h3 class="card-text">[時間帯]:{{ $post->timePeriod->time_slot}}</h3>
+                                    <h3>[詳細]</h3>
+                                    <p class="card-text">{{ $post->description}}</p>
+                                    <a href="/suspicious_reports/{{ $post->id }}" class="btn btn-primary">詳細</a>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <div class="alert alert-primary" role="alert">
+                駐輪場の安全情報の共有
+            </div>
+            <div class="container text-center">
+                <div class="row row-cols-4">
+                    @foreach ($safetyReports as $post )
+                        <div class="col">
+                            <div class="card" style="width: 18rem;">
+                                <!-- <img src="..." class="card-img-top" alt="..."> -->
+                                <div class="card-body">
+                                    <h1 class="card-title">{{ $post->spot->name}}</h1>
+                                    <h2 class="card-text">[訪問日]:{{ $post->date }}</h2>
+                                    <h3 class="card-text">[時間帯]:{{ $post->timePeriod->time_slot}}</h3>
+                                    <h3 class="card-text">[監視員]{{ $post->securityStaff->status }}</h3>
+                                    <h3 class="card-text">[防犯カメラ]{{ $post->securityCamera->status }}</h3>
+                                    <h3>[詳細]</h3>
+                                    <p class="card-text">{{ $post->description}}</p>
+                                    <a href="/safety_reports/{{ $post->id }}" class="btn btn-primary">詳細</a>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+
+        <div class="right-sidebar">
+            <div class="alert alert-dark" role="alert">
+                駐輪場情報
+            </div>
+            <div id="parking-details" class="parking-details">
+                <!-- 詳細情報がここに表示される -->
+            </div>
         </div>
 
         <div class="map-container" id="map"></div>
         <script>
-            var lat = 35.729493379635535;
-            var lng = 139.71086479574538;
+            let map;
+            const markers = [];
 
             async function initMap() {
                 // //マップの初期状態を設定
-                // const { Map } = await google.maps.importLibrary("maps");
-                // const map = new google.maps.Map(document.getElementById("map"), {
-                //     center: { lat, lng },
-                //     zoom: 16,
-                // });
-                // console.log(map);
                 const { Map } = await google.maps.importLibrary("maps");
                 const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
 
@@ -98,21 +182,24 @@
                             var mapLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
                             var lat = position.coords.latitude;
                             var lng = position.coords.longitude;
-                            const map = new google.maps.Map(document.getElementById("map"), {
+                            map = new google.maps.Map(document.getElementById("map"), {
                                 center: { lat, lng },
                                 zoom: 16,
                                 mapId: "DEMO_MAP_ID",
                             });
+                            console.log('初期化されました',map);
+
                             const pinImg = document.createElement("img");
                             pinImg.src = "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
-
-
                             marker = new google.maps.marker.AdvancedMarkerElement({
                                 map: map,
                                 position: mapLatLng,
                                 title: "現在地",
                                 content: pinImg,
                             });
+
+                            findPlaces(lat, lng);
+
                             // searchNearbyParking(lat, lng, map)
                             map.addListener("click", (e) => {
                                 console.log(e);
@@ -121,132 +208,111 @@
                                 console.log(clickedLat,clickedLng);
                                 handleMapClick(clickedLat, clickedLng, map);
                             });
-
                         },
                         function(error){
                             console.log('現在地取得失敗');
                             alert("現在地の取得に失敗しました。デフォルト位置を使用します。");
+                            var lat = 35.729493379635535;
+                            var lng = 139.71086479574538;
 
                             const map = new google.maps.Map(document.getElementById("map"), {
                                 center: { lat, lng },
                                 zoom: 16,
                             });
-
+                            findPlaces(lat, lng);
                         }
                     );
                 } else {
                     console.log('現在地サポートなし');
                     alert("現在地の取得がサポートされていません。デフォルト位置を使用します。");
-
+                    var lat = 35.729493379635535;
+                    var lng = 139.71086479574538;
                     const map = new google.maps.Map(document.getElementById("map"), {
                         center: { lat, lng },
                         zoom: 16,
                     });
-
+                    findPlaces(lat, lng);
                 }
-
-                // //マップの情報を取得
-                // const { PlacesService } = await google.maps.importLibrary("places");
-                // const placesService = new google.maps.PlacesService(map);
-
-                // // 近くの駐輪場を表示
-                // searchNearbyParking(lat, lng, map)
-                // console.log(map);
-                // // マップをクリックしたときの関数を定義
-                // map.addListener("click", (e) => {
-                //     const clickedLat = e.latLng.lat();
-                //     const clickedLng = e.latLng.lng();
-                //     handleMapClick(clickedLat, clickedLng);
-                // });
             }
 
-            // 近くの駐輪場を探す
-            // async function searchNearbyParking(lat, lng, map) {
-                
-            //     console.log(lat,lng);
-            //     const { PlaceService, SearchNearbyRankPreference } = await google.maps.importLibrary("places");
-            //     const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
-            //     let center = new google.maps.LatLng(lat, lng);
-            //     const request = {
-            //         fields: ["displayName", "location", "businessStatus"],
-            //         locationRestriction: {
-            //             center: center,
-            //             radius: 1500,
-            //         },
-            //         // includedPrimaryTypes: ["bicycle_parking"],
-            //         keyword:'駐輪場'
-            //     };
-            //     const { places } = await PlaceService.nearbySearch(request);
+            // サイドバーを更新する関数
+            function updateSidebar(place) {
+                const parkingDetailsElement = document.getElementById("parking-details");
+                parkingDetailsElement.innerHTML = ""; // サイドバーの内容をクリア
+                console.log(place);
+                // 名前と住所を表示
+                const nameElement = document.createElement("h3");
+                nameElement.textContent = place.displayName;
 
-            //     if(places.length) {
-            //         const { LatLngBounds } = await google.maps.importLibrary("core");
-            //         const bounds = new LatLngBounds();
+                const addressElement = document.createElement("p");
+                addressElement.textContent = place.formattedAddress || "住所情報がありません";
 
-            //         places.forEach((place) => {
-            //             const markerView = new AdvancedMarkerElement({
-            //                 map,
-            //                 position: place.location,
-            //                 title: place.displayName,
-            //             });
+                parkingDetailsElement.appendChild(nameElement);
+                parkingDetailsElement.appendChild(addressElement);
+            }
 
-            //             bounds.extend(place.location);
-            //         });
-            //         map.fitBounds(bounds);
-            //     } else {
-            //         console.warn("駐輪場の検索に失敗しました:", status);
-            //     }
-            // }
+            async function findPlaces(lat, lng) {
 
-            async function findPlaces() {
                 const { Place } = await google.maps.importLibrary("places");
                 //@ts-ignore
                 const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
                 const request = {
-                    textQuery: "Tacos in Mountain View",      //keywordに近いところ
-                    fields: ["displayName", "location", "businessStatus"],  //ほしい情報
-                    includedType: "restaurant",                             //検索対象のタイプを指定
-                    isOpenNow: true,                                        //営業中のものだけにする(true)かしない(false)か
+                    textQuery: "駐輪場",    //keywordに近いところ
+                    fields: ["displayName", "location", "businessStatus", "formattedAddress"],  //ほしい情報
+                    locationBias: { center: { lat, lng }, radius: 5000 }, // 検索範囲をクリック位置に設定
+                    includedType: "",                                    //検索対象のタイプを指定
+                    isOpenNow: false,                                        //営業中のものだけにする(true)かしない(false)か
                     language: "ja",                                         //日本語ならja
-                    maxResultCount: 7,                                      //最大20
-                    minRating: 3.2,                                         //表示する建物の、最低評価の閾値を設定
-                    region: "us",                                           //検索の対象地域。日本ならjp
+                    maxResultCount: 20,                                      //最大20
+                    minRating: 0,                                         //表示する建物の、最低評価の閾値を設定
+                    region: "jp",                                           //検索の対象地域。日本ならjp
                     useStrictTypeFiltering: false,                          //includeTypeに完全一致するものだけにする(true)かしない(false)か
                 };
                 //@ts-ignore
                 const { places } = await Place.searchByText(request);
-                
                 if (places.length) {
-                    console.log(places);
                 
                     const { LatLngBounds } = await google.maps.importLibrary("core");
                     const bounds = new LatLngBounds();
-                    
-                    console.log(map);
+                    // console.log('places',places);
+                    // console.log('map',map);
                     // Loop through and get all the results.
                     places.forEach((place) => {
-                    const markerView = new AdvancedMarkerElement({
-                        map,
-                        position: place.location,
-                        title: place.displayName,
+                        // console.log('place.location',place.location);
+                        // const position = new google.maps.LatLng(place.location.lat(), place.location.lng());
+                        const position = { lat: place.location.lat(), lng: place.location.lng() };
+                        // console.log('position',position);
+                        const marker = new AdvancedMarkerElement({
+                            map: map,
+                            position: position,
+                            title: place.displayName,
+                            gmpClickable: true,
+                        });
+
+                        // マーカークリック時のイベント
+                        marker.addListener("click", () => {
+                            // updateSidebar(place);
+                            console.log('place.displayName',place.displayName);
+                            updateSidebar(place);
+                        });
+
+                        markers.push(marker); // マーカーを全体リストに追加
+                        bounds.extend(position);
+                        bounds.extend(position);
                     });
-                
-                    bounds.extend(place.location);
-                    console.log(place);
-                    });
-                    map.setCenter(bounds.getCenter());
                 } else {
                     console.log("No results");
                 }
-                }
+            }
 
 
             // マップがクリックされたときの関数
             function handleMapClick(clickedLat, clickedLng, map) {
-                console.log(clickedLat, clickedLng);
-                let center = new google.maps.LatLng(clickedLat, clickedLng);
-                map.panTo(center);
-                // searchNearbyParking(clickedLat, clickedLng, map);
-                findPlaces();
+                // const markers=[]
+                // const center = new google.maps.LatLng(clickedLat, clickedLng);
+                const center = { lat: clickedLat, lng: clickedLng };
+                map.setCenter(center);
+                findPlaces(clickedLat, clickedLng);
             }
 
             initMap();

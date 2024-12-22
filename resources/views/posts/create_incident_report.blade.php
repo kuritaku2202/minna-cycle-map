@@ -56,9 +56,9 @@
 
                 <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
 
-                <button id="upload_widget" class="cloudinary-button">Upload Files</button>
+                <!-- <button id="upload_widget" class="cloudinary-button">Upload Files</button> -->
 
-                <script type="text/javascript">
+                <!-- <script type="text/javascript">
                     document.getElementById('upload_widget').addEventListener('click', function () {
                         cloudinary.openUploadWidget(
                             {あ
@@ -72,7 +72,7 @@
                             }
                         );
                     }, false);
-                </script>
+                </script> -->
             </div>
         </body>
     </x-app-layout>

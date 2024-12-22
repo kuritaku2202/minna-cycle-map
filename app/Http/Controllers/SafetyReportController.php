@@ -13,7 +13,7 @@ use App\Models\SecurityStaff;
 class SafetyReportController extends Controller
 {
     public function getSafetyReports(){
-        return SafetyReport::orderBy('created_at', 'desc')->take(3)->get();
+        return SafetyReport::orderBy('date', 'desc')->take(1)->get();
     }
     public function index(SafetyReport $safetyReport){
         return view('posts.all_safety_reports')->with(['safetyReports'=>$safetyReport->get()]);
@@ -42,7 +42,16 @@ class SafetyReportController extends Controller
     }
     public function create(TimePeriod $timePeriod, Request $request,Spot $spot){
         $input=$request['spot'];
-        $spot->fill($input)->save();
+        // 同じデータが存在するかをチェック
+        $existingSpot = Spot::where('name', $input['name'])->first();
+
+        if ($existingSpot) {
+            // データがすでに存在する場合、そのデータを使用
+            $spot = $existingSpot;
+        } else {
+            // データが存在しない場合、新しく保存
+            $spot->fill($input)->save();
+        }
 
         return view('posts.create_safety_report')->with(['timePeriods'=>$timePeriod->get(),'spot'=>$spot]);
     }

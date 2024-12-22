@@ -11,7 +11,7 @@ use App\Models\TimePeriod;
 class SuspiciousReportController extends Controller
 {
     public function getSuspiciousReports(){
-        return SuspiciousReport::orderBy('created_at', 'desc')->take(3)->get();
+        return SuspiciousReport::orderBy('date', 'desc')->take(1)->get();
     }
     public function index(SuspiciousReport $suspiciousReport){
         return view('posts.all_suspicious_reports')->with(['suspiciousReports'=>$suspiciousReport->get()]);
@@ -38,7 +38,16 @@ class SuspiciousReportController extends Controller
     }
     public function create(TimePeriod $timePeriod, Request $request,Spot $spot){
         $input=$request['spot'];
-        $spot->fill($input)->save();
+        // 同じデータが存在するかをチェック
+        $existingSpot = Spot::where('name', $input['name'])->first();
+
+        if ($existingSpot) {
+            // データがすでに存在する場合、そのデータを使用
+            $spot = $existingSpot;
+        } else {
+            // データが存在しない場合、新しく保存
+            $spot->fill($input)->save();
+        }
 
         return view('posts.create_suspicious_report')->with(['timePeriods'=>$timePeriod->get(),'spot'=>$spot]);
     }
