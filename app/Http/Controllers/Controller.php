@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use App\Http\Controllers\IncidentReportController;
+use App\Http\Controllers\SuspiciousReportController;
+use App\Http\Controllers\SafetyReportController;
 
 
 class Controller extends BaseController
@@ -26,19 +29,25 @@ class Controller extends BaseController
 
     // }
 
-    public function home(){
-
+    public function home(IncidentReportController $incidentReportController, SuspiciousReportController $suspiciousReportController, SafetyReportController $safetyReportController){
+        //他のコントローラーからデータを取得
+        $incidentReports = $incidentReportController-> getIncidentReports();
+        $suspiciousReports = $suspiciousReportController->getSuspiciousReports();
+        $safetyReports = $safetyReportController->getSafetyReports();
         // .envのAPIキーを変数へ
         $google_map_api_key = config('app.google_map_api_key');
-        return view('posts.home')->with(['google_map_api_key' => $google_map_api_key]);
+        return view('posts.home', compact('incidentReports', 'suspiciousReports', 'safetyReports', 'google_map_api_key'));
 
     }
 
-    public function homeExperiment(){
-
+    public function homeExperiment(IncidentReportController $incidentReportController, SuspiciousReportController $suspiciousReportController, SafetyReportController $safetyReportController){
+        //他のコントローラーからデータを取得
+        $incidentReports = $incidentReportController-> getIncidentReports();
+        $suspiciousReports = $suspiciousReportController->getSuspiciousReports();
+        $safetyReports = $safetyReportController->getSafetyReports();
         // .envのAPIキーを変数へ
         $google_map_api_key = config('app.google_map_api_key');
-        return view('posts.home_experiment')->with(['google_map_api_key' => $google_map_api_key]);
+        return view('posts.home_experiment', compact('incidentReports', 'suspiciousReports', 'safetyReports', 'google_map_api_key'));
 
     }
 

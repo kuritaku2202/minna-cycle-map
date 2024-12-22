@@ -15,7 +15,7 @@ class IncidentReportController extends Controller
 {
 //みんなの投稿画面、ホーム画面で使用
     public function getIncidentReports(){
-        return IncidentReport::orderBy('created_at', 'desc')->take(3)->get();//最新の投稿３件を取得
+        return IncidentReport::orderBy('date', 'desc')->take(1)->get();//最新の投稿３件を取得
     }
 //種別投稿画面で使用
     public function index(IncidentReport $incidentReport){
@@ -44,8 +44,18 @@ class IncidentReportController extends Controller
         return view('posts.choose_incident_spot')->with(['google_map_api_key'=>$google_map_api_key]);
     }
     public function create(TimePeriod $timePeriod,Request $request, Spot $spot){
-        $input=$request['spot'];
-        $spot->fill($input)->save();
+        $input = $request['spot'];
+
+        // 同じデータが存在するかをチェック
+        $existingSpot = Spot::where('name', $input['name'])->first();
+
+        if ($existingSpot) {
+            // データがすでに存在する場合、そのデータを使用
+            $spot = $existingSpot;
+        } else {
+            // データが存在しない場合、新しく保存
+            $spot->fill($input)->save();
+        }
 
         return view('posts.create_incident_report')->with(['timePeriods'=>$timePeriod->get(),'spot'=>$spot]);
     }
