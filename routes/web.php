@@ -88,3 +88,7 @@ Route::controller(SafetyReportController::class)->middleware(['auth'])->group(fu
     Route::post('/create_safety_report', 'store');
     Route::get('/choose_safety_spot', 'chooseSafetySpot');
 });
+
+Route::controller(SpotController::class)->middleware(['auth'])->group(function(){
+    Route::get('/api/posts-by-spot', 'getPostsBySpot');
+});
