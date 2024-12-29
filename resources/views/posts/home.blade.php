@@ -20,7 +20,7 @@
             z-index: 9999;
             position: fixed;
             left: 0;
-            margin-top: auto;
+            margin-top: 4.5%;
             background-color: #f8f9fa;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
             padding: 15px;
