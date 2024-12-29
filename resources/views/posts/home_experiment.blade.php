@@ -14,7 +14,7 @@
             position: absolute;
         }
         .left-sidebar {
-            width: 300px;
+            width: 350px;
             height: 100vh;
             z-index: 9999;
             position: fixed;
@@ -82,14 +82,85 @@
 <x-app-layout>
     <body>
         <div class="left-sidebar">
-            <h2>最近の投稿</h2>
-            <ul id="post-list" class="post-list">
-                <!-- 投稿一覧はここに表示される -->
-            </ul>
+            <div class="alert alert-dark" role="alert">
+                最近の投稿
+            </div>
+            <div class="alert alert-primary" role="alert">
+                被害報告
+            </div>
+            <div class="container text-center">
+                <div class="row row-cols-4">
+                        @foreach ($incidentReports as $post )
+                            <div class="col">
+                                <div class="card" style="width: 18rem;">
+                                    <!-- <img src="..." class="card-img-top" alt="..."> -->
+                                    <div class="card-body">
+                                        <h1 class="card-title">{{ $post->spot->name}}</h1>
+                                        <h2 class="card-text">[被害に遭った日]:{{ $post->date }}</h2>
+                                        <h3 class="card-text">[時間帯]:{{ $post->timePeriod->time_slot}}</h3>
+                                        <h3>[詳細]</h3>
+                                        <p class="card-text">{{ $post->description}}</p>
+                                        <a href="/incident_reports/{{ $post->id }}" class="btn btn-primary">詳細</a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                </div>
+            </div>
+
+            <div class="alert alert-primary" role="alert">
+                不審者・不審物情報
+            </div>
+            <div class="container text-center">
+                <div class="row row-cols-4">
+                    @foreach ($suspiciousReports as $post )
+                        <div class="col">
+                            <div class="card" style="width: 18rem;">
+                                <!-- <img src="..." class="card-img-top" alt="..."> -->
+                                <div class="card-body">
+                                    <h1 class="card-title">{{ $post->spot->name}}</h1>
+                                    <h2 class="card-text">[目撃日]:{{ $post->date }}</h2>
+                                    <h3 class="card-text">[時間帯]:{{ $post->timePeriod->time_slot}}</h3>
+                                    <h3>[詳細]</h3>
+                                    <p class="card-text">{{ $post->description}}</p>
+                                    <a href="/suspicious_reports/{{ $post->id }}" class="btn btn-primary">詳細</a>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <div class="alert alert-primary" role="alert">
+                駐輪場の安全情報の共有
+            </div>
+            <div class="container text-center">
+                <div class="row row-cols-4">
+                    @foreach ($safetyReports as $post )
+                        <div class="col">
+                            <div class="card" style="width: 18rem;">
+                                <!-- <img src="..." class="card-img-top" alt="..."> -->
+                                <div class="card-body">
+                                    <h1 class="card-title">{{ $post->spot->name}}</h1>
+                                    <h2 class="card-text">[訪問日]:{{ $post->date }}</h2>
+                                    <h3 class="card-text">[時間帯]:{{ $post->timePeriod->time_slot}}</h3>
+                                    <h3 class="card-text">[監視員]{{ $post->securityStaff->status }}</h3>
+                                    <h3 class="card-text">[防犯カメラ]{{ $post->securityCamera->status }}</h3>
+                                    <h3>[詳細]</h3>
+                                    <p class="card-text">{{ $post->description}}</p>
+                                    <a href="/safety_reports/{{ $post->id }}" class="btn btn-primary">詳細</a>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
         </div>
 
         <div class="right-sidebar">
-            <h2>駐輪場情報</h2>
+            <div class="alert alert-dark" role="alert">
+                駐輪場情報
+            </div>
             <div id="parking-details" class="parking-details">
                 <!-- 詳細情報がここに表示される -->
             </div>
@@ -116,7 +187,6 @@
                                 zoom: 16,
                                 mapId: "DEMO_MAP_ID",
                             });
-                            console.log('初期化されました',map);
 
                             const pinImg = document.createElement("img");
                             pinImg.src = "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
@@ -131,10 +201,8 @@
 
                             // searchNearbyParking(lat, lng, map)
                             map.addListener("click", (e) => {
-                                console.log(e);
                                 const clickedLat = e.latLng.lat();
                                 const clickedLng = e.latLng.lng();
-                                console.log(clickedLat,clickedLng);
                                 handleMapClick(clickedLat, clickedLng, map);
                             });
                         },
@@ -168,7 +236,7 @@
             function updateSidebar(place) {
                 const parkingDetailsElement = document.getElementById("parking-details");
                 parkingDetailsElement.innerHTML = ""; // サイドバーの内容をクリア
-
+                console.log('place',place);
                 // 名前と住所を表示
                 const nameElement = document.createElement("h3");
                 nameElement.textContent = place.displayName;
@@ -187,10 +255,10 @@
                 const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
                 const request = {
                     textQuery: "駐輪場",    //keywordに近いところ
-                    fields: ["displayName", "location", "businessStatus"],  //ほしい情報
+                    fields: ["displayName", "location", "businessStatus", "formattedAddress"],  //ほしい情報
                     locationBias: { center: { lat, lng }, radius: 5000 }, // 検索範囲をクリック位置に設定
                     includedType: "",                                    //検索対象のタイプを指定
-                    isOpenNow: true,                                        //営業中のものだけにする(true)かしない(false)か
+                    isOpenNow: false,                                        //営業中のものだけにする(true)かしない(false)か
                     language: "ja",                                         //日本語ならja
                     maxResultCount: 20,                                      //最大20
                     minRating: 0,                                         //表示する建物の、最低評価の閾値を設定
@@ -203,25 +271,33 @@
                 
                     const { LatLngBounds } = await google.maps.importLibrary("core");
                     const bounds = new LatLngBounds();
-                    console.log('places',places);
-                    console.log('map',map);
+                    // console.log('places',places);
+                    // console.log('map',map);
                     // Loop through and get all the results.
                     places.forEach((place) => {
                         // console.log('place.location',place.location);
                         // const position = new google.maps.LatLng(place.location.lat(), place.location.lng());
                         const position = { lat: place.location.lat(), lng: place.location.lng() };
                         // console.log('position',position);
-                        const markerView = new AdvancedMarkerElement({
+                        const marker = new AdvancedMarkerElement({
                             map: map,
                             position: position,
                             title: place.displayName,
+                            gmpClickable: true,
                         });
 
                         // マーカークリック時のイベント
-                        marker.addListener("click", () => {
-                            // updateSidebar(place);
-                            // console.log(place.displayName);
-                            this.updateSidebar(place);
+                        marker.addListener("click", async() => {
+                            updateSidebar(place);
+                            const postsData = await fetchPostsBySpot(place.displayName);
+
+                            if (postsData) {
+                                console.log('postsData',postsData);
+                                // サイドバーに投稿を表示
+                                displayPosts(postsData);
+                            } else {
+                                alert("関連する投稿が見つかりませんでした。");
+                            }
                         });
 
                         markers.push(marker); // マーカーを全体リストに追加
@@ -236,10 +312,68 @@
 
             // マップがクリックされたときの関数
             function handleMapClick(clickedLat, clickedLng, map) {
+                // const markers=[]
                 // const center = new google.maps.LatLng(clickedLat, clickedLng);
                 const center = { lat: clickedLat, lng: clickedLng };
                 map.setCenter(center);
                 findPlaces(clickedLat, clickedLng);
+            }
+
+            async function fetchPostsBySpot(name) {
+                try {
+                    const response = await fetch(`/api/posts-by-spot?name=${encodeURIComponent(name)}`);
+                    if (!response.ok) {
+                        throw new Error('Spot not found or no related posts');
+                    }
+                    const data = await response.json();
+                    console.log("API Response:", data); // レスポンスをログ出力
+                    return data;
+                } catch (error) {
+                    console.error('Error fetching posts:', error);
+                    return null;
+                }
+            }
+
+            function displayPosts(data) {
+                const parkingDetailsElement = document.getElementById("parking-details");
+
+                console.log('data',data);
+                // 投稿リスト
+                const sectionTitles = {
+                    incident_reports: "被害報告",
+                    suspicious_reports: "不審者・不審物情報",
+                    safety_reports: "駐輪場の安全情報",
+                };
+
+                for (const [key, reports] of Object.entries(data)) {
+                    if (key === 'spot') continue;
+
+                    const sectionHeader = document.createElement("h4");
+                    sectionHeader.textContent = sectionTitles[key];
+                    parkingDetailsElement.appendChild(sectionHeader);
+
+                    if (reports.length === 0) {
+                        const noReports = document.createElement("p");
+                        noReports.textContent = "関連投稿なし";
+                        parkingDetailsElement.appendChild(noReports);
+                    } else {
+                        reports.forEach((report) => {
+                            const reportDiv = document.createElement("div");
+                            reportDiv.classList.add("report");
+
+                            console.log('report',report);
+
+                            const reportDetails = `
+                                <p>日付: ${report.date}</p>
+                                <p>時間帯: ${report.time_period.time_slot}</p>
+                                <p>詳細: ${report.description}</p>
+                                <a href="/${key}/${report.id}" class="btn btn-primary">詳細を見る</a>
+                            `;
+                            reportDiv.innerHTML = reportDetails;
+                            parkingDetailsElement.appendChild(reportDiv);
+                        });
+                    }
+                }
             }
 
             initMap();

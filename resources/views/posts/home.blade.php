@@ -10,11 +10,12 @@
         .map-container {
             width: 100%;
             height: 90%;
+            z-index: 8000;
             margin-top: auto;
             position: absolute;
         }
         .left-sidebar {
-            width: 300px;
+            width: 350px;
             height: 100vh;
             z-index: 9999;
             position: fixed;
@@ -25,6 +26,12 @@
             padding: 15px;
             overflow-y: auto;
         }
+        .btn-left-sidebar{
+            z-index: 8500;
+            position:fixed;
+            top: 20%;
+            left: 0;
+        }
         .right-sidebar {
             width: 300px;
             height: 100vh;
@@ -33,7 +40,7 @@
             right: 0;
             margin-top: auto;
             background-color: #f8f9fa;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
             padding: 15px;
             overflow-y: auto;
         }
@@ -51,21 +58,7 @@
             border: 1px solid #ddd;
             border-radius: 5px;
         }
-        .search-button {
-            position: absolute;
-            margin-top: auto;
-            right: 10px;
-            z-index: 9999;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .search-button:hover {
-            background-color: #0056b3;
-        }
+
     </style>
     <!-- <script src="https://maps.googleapis.com/maps/api/js?language=ja&region=JP&key={{$google_map_api_key}}&libraries=places&callback=initMap" async defer></script> -->
     
@@ -81,79 +74,86 @@
 </head>
 <x-app-layout>
     <body>
-        <div class="left-sidebar">
-            <div class="alert alert-dark" role="alert">
-                最近の投稿
+        <button class="btn btn-primary btn-left-sidebar" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">＞</button>
+
+        <div class="offcanvas offcanvas-start show left-sidebar" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+            <div class="offcanvas-header">
+                <div class="alert alert-dark" role="alert">
+                    最近の投稿
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
-            <div class="alert alert-primary" role="alert">
-                被害報告
-            </div>
-            <div class="container text-center">
-                <div class="row row-cols-4">
-                        @foreach ($incidentReports as $post )
-                            <div class="col">
-                                <div class="card" style="width: 18rem;">
-                                    <!-- <img src="..." class="card-img-top" alt="..."> -->
-                                    <div class="card-body">
-                                        <h1 class="card-title">{{ $post->spot->name}}</h1>
-                                        <h2 class="card-text">[被害に遭った日]:{{ $post->date }}</h2>
-                                        <h3 class="card-text">[時間帯]:{{ $post->timePeriod->time_slot}}</h3>
-                                        <h3>[詳細]</h3>
-                                        <p class="card-text">{{ $post->description}}</p>
-                                        <a href="/incident_reports/{{ $post->id }}" class="btn btn-primary">詳細</a>
+            <div class="offcanvas-body">
+                    <div class="alert alert-primary" role="alert">
+                        被害報告
+                    </div>
+                    <div class="container text-center">
+                        <div class="row row-cols-4">
+                                @foreach ($incidentReports as $post )
+                                    <div class="col">
+                                        <div class="card" style="width: 18rem;">
+                                            <!-- <img src="..." class="card-img-top" alt="..."> -->
+                                            <div class="card-body">
+                                                <h1 class="card-title">{{ $post->spot->name}}</h1>
+                                                <h2 class="card-text">[被害に遭った日]:{{ $post->date }}</h2>
+                                                <h3 class="card-text">[時間帯]:{{ $post->timePeriod->time_slot}}</h3>
+                                                <h3>[詳細]</h3>
+                                                <p class="card-text">{{ $post->description}}</p>
+                                                <a href="/incident_reports/{{ $post->id }}" class="btn btn-primary">詳細</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                        </div>
+                    </div>
+        
+                    <div class="alert alert-primary" role="alert">
+                        不審者・不審物情報
+                    </div>
+                    <div class="container text-center">
+                        <div class="row row-cols-4">
+                            @foreach ($suspiciousReports as $post )
+                                <div class="col">
+                                    <div class="card" style="width: 18rem;">
+                                        <!-- <img src="..." class="card-img-top" alt="..."> -->
+                                        <div class="card-body">
+                                            <h1 class="card-title">{{ $post->spot->name}}</h1>
+                                            <h2 class="card-text">[目撃日]:{{ $post->date }}</h2>
+                                            <h3 class="card-text">[時間帯]:{{ $post->timePeriod->time_slot}}</h3>
+                                            <h3>[詳細]</h3>
+                                            <p class="card-text">{{ $post->description}}</p>
+                                            <a href="/suspicious_reports/{{ $post->id }}" class="btn btn-primary">詳細</a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endforeach
-                </div>
-            </div>
-
-            <div class="alert alert-primary" role="alert">
-                不審者・不審物情報
-            </div>
-            <div class="container text-center">
-                <div class="row row-cols-4">
-                    @foreach ($suspiciousReports as $post )
-                        <div class="col">
-                            <div class="card" style="width: 18rem;">
-                                <!-- <img src="..." class="card-img-top" alt="..."> -->
-                                <div class="card-body">
-                                    <h1 class="card-title">{{ $post->spot->name}}</h1>
-                                    <h2 class="card-text">[目撃日]:{{ $post->date }}</h2>
-                                    <h3 class="card-text">[時間帯]:{{ $post->timePeriod->time_slot}}</h3>
-                                    <h3>[詳細]</h3>
-                                    <p class="card-text">{{ $post->description}}</p>
-                                    <a href="/suspicious_reports/{{ $post->id }}" class="btn btn-primary">詳細</a>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
-                    @endforeach
-                </div>
-            </div>
-
-            <div class="alert alert-primary" role="alert">
-                駐輪場の安全情報の共有
-            </div>
-            <div class="container text-center">
-                <div class="row row-cols-4">
-                    @foreach ($safetyReports as $post )
-                        <div class="col">
-                            <div class="card" style="width: 18rem;">
-                                <!-- <img src="..." class="card-img-top" alt="..."> -->
-                                <div class="card-body">
-                                    <h1 class="card-title">{{ $post->spot->name}}</h1>
-                                    <h2 class="card-text">[訪問日]:{{ $post->date }}</h2>
-                                    <h3 class="card-text">[時間帯]:{{ $post->timePeriod->time_slot}}</h3>
-                                    <h3 class="card-text">[監視員]{{ $post->securityStaff->status }}</h3>
-                                    <h3 class="card-text">[防犯カメラ]{{ $post->securityCamera->status }}</h3>
-                                    <h3>[詳細]</h3>
-                                    <p class="card-text">{{ $post->description}}</p>
-                                    <a href="/safety_reports/{{ $post->id }}" class="btn btn-primary">詳細</a>
+                    </div>
+        
+                    <div class="alert alert-primary" role="alert">
+                        駐輪場の安全情報の共有
+                    </div>
+                    <div class="container text-center">
+                        <div class="row row-cols-4">
+                            @foreach ($safetyReports as $post )
+                                <div class="col">
+                                    <div class="card" style="width: 18rem;">
+                                        <!-- <img src="..." class="card-img-top" alt="..."> -->
+                                        <div class="card-body">
+                                            <h1 class="card-title">{{ $post->spot->name}}</h1>
+                                            <h2 class="card-text">[訪問日]:{{ $post->date }}</h2>
+                                            <h3 class="card-text">[時間帯]:{{ $post->timePeriod->time_slot}}</h3>
+                                            <h3 class="card-text">[監視員]{{ $post->securityStaff->status }}</h3>
+                                            <h3 class="card-text">[防犯カメラ]{{ $post->securityCamera->status }}</h3>
+                                            <h3>[詳細]</h3>
+                                            <p class="card-text">{{ $post->description}}</p>
+                                            <a href="/safety_reports/{{ $post->id }}" class="btn btn-primary">詳細</a>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                            @endforeach
                         </div>
-                    @endforeach
-                </div>
+                    </div>
             </div>
         </div>
 
@@ -167,6 +167,7 @@
         </div>
 
         <div class="map-container" id="map"></div>
+
         <script>
             let map;
             const markers = [];
@@ -187,7 +188,6 @@
                                 zoom: 16,
                                 mapId: "DEMO_MAP_ID",
                             });
-                            console.log('初期化されました',map);
 
                             const pinImg = document.createElement("img");
                             pinImg.src = "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
@@ -202,10 +202,8 @@
 
                             // searchNearbyParking(lat, lng, map)
                             map.addListener("click", (e) => {
-                                console.log(e);
                                 const clickedLat = e.latLng.lat();
                                 const clickedLng = e.latLng.lng();
-                                console.log(clickedLat,clickedLng);
                                 handleMapClick(clickedLat, clickedLng, map);
                             });
                         },
@@ -239,7 +237,7 @@
             function updateSidebar(place) {
                 const parkingDetailsElement = document.getElementById("parking-details");
                 parkingDetailsElement.innerHTML = ""; // サイドバーの内容をクリア
-                console.log(place);
+                console.log('place',place);
                 // 名前と住所を表示
                 const nameElement = document.createElement("h3");
                 nameElement.textContent = place.displayName;
@@ -290,10 +288,17 @@
                         });
 
                         // マーカークリック時のイベント
-                        marker.addListener("click", () => {
-                            // updateSidebar(place);
-                            console.log('place.displayName',place.displayName);
+                        marker.addListener("click", async() => {
                             updateSidebar(place);
+                            const postsData = await fetchPostsBySpot(place.displayName);
+
+                            if (postsData) {
+                                console.log('postsData',postsData);
+                                // サイドバーに投稿を表示
+                                displayPosts(postsData);
+                            } else {
+                                alert("関連する投稿が見つかりませんでした。");
+                            }
                         });
 
                         markers.push(marker); // マーカーを全体リストに追加
@@ -313,6 +318,63 @@
                 const center = { lat: clickedLat, lng: clickedLng };
                 map.setCenter(center);
                 findPlaces(clickedLat, clickedLng);
+            }
+
+            async function fetchPostsBySpot(name) {
+                try {
+                    const response = await fetch(`/api/posts-by-spot?name=${encodeURIComponent(name)}`);
+                    if (!response.ok) {
+                        throw new Error('Spot not found or no related posts');
+                    }
+                    const data = await response.json();
+                    console.log("API Response:", data); // レスポンスをログ出力
+                    return data;
+                } catch (error) {
+                    console.error('Error fetching posts:', error);
+                    return null;
+                }
+            }
+
+            function displayPosts(data) {
+                const parkingDetailsElement = document.getElementById("parking-details");
+
+                console.log('data',data);
+                // 投稿リスト
+                const sectionTitles = {
+                    incident_reports: "被害報告",
+                    suspicious_reports: "不審者・不審物情報",
+                    safety_reports: "駐輪場の安全情報",
+                };
+
+                for (const [key, reports] of Object.entries(data)) {
+                    if (key === 'spot') continue;
+
+                    const sectionHeader = document.createElement("h4");
+                    sectionHeader.textContent = sectionTitles[key];
+                    parkingDetailsElement.appendChild(sectionHeader);
+
+                    if (reports.length === 0) {
+                        const noReports = document.createElement("p");
+                        noReports.textContent = "関連投稿なし";
+                        parkingDetailsElement.appendChild(noReports);
+                    } else {
+                        reports.forEach((report) => {
+                            const reportDiv = document.createElement("div");
+                            reportDiv.classList.add("report");
+
+                            console.log('report',report);
+
+                            const reportDetails = `
+                                <p>日付: ${report.date}</p>
+                                <p>時間帯: ${report.time_period.time_slot}</p>
+                                <p>詳細: ${report.description}</p>
+                                <a href="/${key}/${report.id}" class="btn btn-primary">詳細を見る</a>
+                            `;
+                            reportDiv.innerHTML = reportDetails;
+                            parkingDetailsElement.appendChild(reportDiv);
+                        });
+                    }
+                }
             }
 
             initMap();
