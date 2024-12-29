@@ -20,12 +20,8 @@ class UserSeeder extends Seeder
                 'name' => 'テストユーザー',
                 'email' => 'example@example.com',
                 'password' => Hash::make('password'),
-                'introduction'=>'テストユーザー(一般利用者)です。',
-                'icon_url'=>'',
-                'administrator'=>1,
                 'created_at' => new DateTime(),
                 'updated_at' => new DateTime(),
-                'deleted_at'=>null
             ]
         ]);
     }
